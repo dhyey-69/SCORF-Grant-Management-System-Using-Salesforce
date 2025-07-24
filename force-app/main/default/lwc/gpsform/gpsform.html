@@ -1,0 +1,861 @@
+<template>
+    <div class="page-container">
+        <div class="header-image" style={headerStyle}>  </div>
+
+        <div class="form-overlay">
+            <div class="steps-container">
+                <div class="steps-wrapper" style={progressStyle}>
+                    <div class="step-item" data-step="1">
+                        <div class={step1CircleClass}>1</div>
+                        <div class="step-label">
+                            <div class="step-subtitle">Organization</div>
+                            <div class="step-subtitle">Information</div>
+                        </div>
+                    </div>
+
+                    <div class="step-item" data-step="2">
+                        <div class={step2CircleClass}>2</div>
+                        <div class="step-label">
+                            <div class="step-subtitle">Technical</div>
+                            <div class="step-subtitle">Proposal</div>
+                        </div>
+                    </div>
+
+                    <div class="step-item" data-step="3">
+                        <div class={step3CircleClass}>3</div>
+                        <div class="step-label">
+                            <div class="step-subtitle">Abatement</div>
+                            <div class="step-subtitle">Strategies</div>
+                        </div>
+                    </div>
+
+                    <div class="step-item" data-step="4">
+                        <div class={step4CircleClass}>4</div>
+                        <div class="step-label">
+                            <div class="step-subtitle">Budget</div>
+                            <div class="step-subtitle">Information</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-content">
+                <div if:true={isStep1} class="step-form step-form-1">
+                    <h2 class="section-title">Organization Information</h2>
+                    <hr class="section-divider" />
+
+                    <!-- Organization Information -->
+                    <div class="form-fields">
+                        <!-- Fund Type -->
+                        <div class="field-group">
+                            <label class="field-label">
+                                * Indicate whether this request is for funds from the Guaranteed Political Subdivision Fund or Discretionary Subfund
+                            </label>
+                            <lightning-combobox
+                                name="fundType"
+                                class="custom-combobox"
+                                data-field="fundType"
+                                value={formData.fundType}
+                                options={fundTypeOptions}
+                                onchange={handleInputChange}
+                                data-required
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Servability Approval -->
+                        <div class="field-group">
+                            <label class="field-label">
+                                * Does the requesting Entity approve line-item servability throughout the technical approval?
+                            </label>
+                            <lightning-combobox
+                                name="servabilityApproval"
+                                data-required
+                                class="custom-combobox"
+                                data-field="servabilityApproval"
+                                value={formData.servabilityApproval}
+                                options={yesNoOptions}
+                                onchange={handleInputChange}
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Name of Person Completing Form -->
+                        <div class="field-group">
+                            <label class="field-label">* Name of Person Completing Form</label>
+                            <input type="text" class="field-input" value={formData.nameOfPersonCompletingForm}
+                                data-field="nameOfPersonCompletingForm" oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <!-- SCEIS Vendor Number -->
+                        <div class="field-group">
+                            <label class="field-label">SCEIS Vendor Number</label>
+                            <input type="text" class="field-input" value={formData.sceisVendorNumber}
+                                data-field="sceisVendorNumber" oninput={handleInputChange}/>
+                        </div>
+
+                        <!-- Entity Type -->
+                        <div class="field-group">
+                            <label class="field-label">* Entity Type</label>
+                            <lightning-combobox
+                                name="entityType"
+                                class="custom-combobox"
+                                data-field="entityType"
+                                value={formData.entityType}
+                                options={entityTypeOptions}
+                                onchange={handleInputChange}
+                                data-required
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <template if:true={isOtherEntityType}>
+                            <div class="field-group">
+                                <label class="field-label">* If you selected "Other" above, please specify entity type</label>
+                                <lightning-input
+                                    type="text"
+                                    name="otherEntityType"
+                                    data-field="otherEntityType"
+                                    value={formData.otherEntityType}
+                                    onchange={handleInputChange}
+                                    data-required-if="entityType=Other"
+                                    placeholder="Specify other entity type">
+                                </lightning-input>
+                            </div>
+                        </template>
+
+                        <!-- Collaborating with any other GPS? -->
+                        <div class="field-group">
+                            <label class="field-label">* Are you collaborating with any other GPS?</label>
+                            <lightning-combobox
+                                name="collaboratingWithOtherGPS"
+                                class="custom-combobox"
+                                data-field="collaboratingWithOtherGPS"
+                                data-required
+                                value={formData.collaboratingWithOtherGPS}
+                                options={yesNoOptions}
+                                onchange={handleInputChange}
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <template if:true={isCollaborating}>
+                            <div class="field-group">
+                                <label class="field-label">* If so, please select the county from the list?</label>
+                                <lightning-dual-listbox
+                                    name="collaboratingCounties"
+                                    label="Select Counties"
+                                    source-label="Available Counties"
+                                    selected-label="Selected Counties"
+                                    options={countyOptions}
+                                    value={formData.collaboratingCounties}
+                                    onchange={handleInputChange}
+                                    data-required-if="collaboratingWithOtherGPS=Yes"
+                                    data-field="collaboratingCounties"
+                                    required>
+                                </lightning-dual-listbox>
+                            </div>
+                        </template>
+
+
+                        <!-- Bellwether Plaintiff -->
+                        <div class="field-group">
+                            <label class="field-label">
+                                * Is the requesting Entity a South Carolina Bellwether Plaintiff?
+                            </label>
+                            <lightning-combobox
+                                name="isBellwetherPlaintiff"
+                                class="custom-combobox"
+                                data-field="isBellwetherPlaintiff"
+                                value={formData.isBellwetherPlaintiff}
+                                data-required
+                                options={yesNoOptions}
+                                onchange={handleInputChange}
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Litigating Subdivision -->
+                        <div class="field-group">
+                            <label class="field-label">* Was the requesting Entity a litigating subdivision?</label>
+                            <lightning-combobox
+                                name="isLitigatingSubdivision"
+                                class="custom-combobox"
+                                data-field="isLitigatingSubdivision"
+                                value={formData.isLitigatingSubdivision}
+                                data-required
+                                options={yesNoOptions}
+                                onchange={handleInputChange}
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Conflict of Interest -->
+                        <div class="field-group">
+                            <label class="field-label">
+                                * Does the requesting Entity, or any board member or employee, have any potential conflict of interest?
+                            </label>
+                            <lightning-combobox
+                                name="conflictOfInterest"
+                                class="custom-combobox"
+                                data-required
+                                data-field="conflictOfInterest"
+                                value={formData.conflictOfInterest}
+                                options={yesNoOptions}
+                                onchange={handleInputChange}
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <template if:true={hasConflict}>
+                            <div class="field-group">
+                                <label class="field-label">* If yes, please identify the SCORF Board member and the relationship.</label>
+                                <lightning-textarea
+                                    name="conflictExplanation"
+                                    data-field="conflictExplanation"
+                                    value={formData.conflictExplanation}
+                                    onchange={handleInputChange}
+                                    data-required-if="conflictOfInterest=Yes"
+                                    placeholder="Provide details of the conflict">
+                                </lightning-textarea>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Upload Authorization Letter -->
+                    <div class="form-field upload-section">
+                        <label class="field-label">* Upload Authorization Letter</label>
+                        <div class="upload-area">
+                            <div class="upload-placeholder" onclick={handleUploadClick}>
+                                <lightning-icon icon-name="utility:upload" size="medium" class="upload-icon"></lightning-icon>
+                                <span class="upload-text">Or drop files</span>
+                            </div>
+
+                            <template if:true={formData.authorizationLetter}>
+                                <div class="uploaded-file">
+                                    <lightning-icon icon-name="doctype:pdf" size="small" class="file-icon"></lightning-icon>
+                                    <span class="file-name">{formData.authorizationLetter}</span>
+                                    <lightning-icon icon-name="utility:delete" size="x-small" class="delete-icon"
+                                        onclick={handleDeleteFile}></lightning-icon>
+                                </div>
+                            </template>
+
+                            <input type="file" accept=".pdf" class="file-input" onchange={handleFileChange}
+                                style="display: none" ref={fileInput} />
+                        </div>
+                    </div>
+
+
+                    <!-- Payment Remit To -->
+                    <h3 class="subsection-title">Payment Remit To (As per SCEIS)</h3>
+                    <hr class="subsection-divider" />
+
+                    <div class="form-fields">
+                        <div class="field-group">
+                            <label class="field-label">* Address Line 1</label>
+                            <input type="text" class="field-input" value={formData.paymentAddress1}
+                                data-field="paymentAddress1" oninput={handleInputChange} data-required />
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Address Line 2</label>
+                            <input type="text" class="field-input" value={formData.paymentAddress2}
+                                data-field="paymentAddress2" oninput={handleInputChange} />
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* City</label>
+                            <input type="text" class="field-input" value={formData.paymentCity} data-field="paymentCity"
+                                oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* State</label>
+                            <lightning-combobox
+                                class="custom-combobox fix-slds-input-faux"
+                                data-field="paymentState"
+                                name="paymentState"
+                                value={formData.paymentState}
+                                options={stateOptions}
+                                onchange={handleInputChange}
+                                data-required
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Zip</label>
+                            <input type="text" class="field-input" value={formData.paymentZip} data-field="paymentZip"
+                                oninput={handleInputChange} data-required data-pattern="^\d{5}$"/>
+                        </div>
+                    </div>
+
+                    <!-- Political Subdivision Address -->
+                    <h3 class="subsection-title">Political Subdivision Address</h3>
+                    <hr class="subsection-divider" />
+
+                    <div class="form-fields">
+                        <div class="field-group">
+                            <label class="field-label">* Address Line 1</label>
+                            <input type="text" class="field-input" value={formData.subdivisionAddress1}
+                                data-field="subdivisionAddress1" oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Address Line 2</label>
+                            <input type="text" class="field-input" value={formData.subdivisionAddress2}
+                                data-field="subdivisionAddress2" oninput={handleInputChange} />
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* City</label>
+                            <input type="text" class="field-input" value={formData.subdivisionCity}
+                                data-field="subdivisionCity" oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* State</label>
+                            <lightning-combobox
+                                class="custom-combobox fix-slds-input-faux"
+                                data-field="subdivisionState"
+                                name="subdivisionState"
+                                value={formData.subdivisionState}
+                                data-required
+                                options={stateOptions}
+                                onchange={handleInputChange}
+                                placeholder="-- Select --">
+                            </lightning-combobox>
+                        </div>
+
+
+                        <div class="field-group">
+                            <label class="field-label">* Zip</label>
+                            <input type="text" class="field-input" value={formData.subdivisionZip}
+                                data-field="subdivisionZip" oninput={handleInputChange} data-required data-pattern="^\d{5}$"/>
+                        </div>
+                    </div>
+
+                    <!-- Project Point of Contact -->
+                    <h3 class="subsection-title">Project Point of Contact</h3>
+                    <hr class="subsection-divider" />
+
+                    <div class="form-fields">
+                        <div class="field-group">
+                            <label class="field-label">* Program Manager Name</label>
+                            <input type="text" class="field-input" value={formData.programManagerName}
+                                data-field="programManagerName" oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Fiscal Manager Name</label>
+                            <input type="text" class="field-input" value={formData.fiscalManagerName}
+                                data-field="fiscalManagerName" oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Program Manager Email</label>
+                            <input type="email" class="field-input" value={formData.programManagerEmail}
+                                data-field="programManagerEmail" oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Fiscal Manager Email</label>
+                            <input type="email" class="field-input" value={formData.fiscalManagerEmail}
+                                data-field="fiscalManagerEmail" oninput={handleInputChange} data-required />
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Program Manager Phone Number</label>
+                            <input type="tel" class="field-input" value={formData.programManagerPhone}
+                                data-field="programManagerPhone" oninput={handleInputChange} data-required data-pattern="^\d{10}$"/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Fiscal Manager Phone Number</label>
+                            <input type="tel" class="field-input" value={formData.fiscalManagerPhone}
+                                data-field="fiscalManagerPhone" oninput={handleInputChange} data-required data-pattern="^\d{10}$"/>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="form-navigation">
+                        <div class="nav-right">
+                            <button class="nav-btn save-btn" onclick={handleSaveExit}>
+                                <lightning-icon icon-name="utility:save" alternative-text="Save & Exit" size="x-small"
+                                    class="icon"></lightning-icon>
+                                Save&Exit
+                            </button>
+                            <button class="nav-btn" onclick={handleNext}>
+                                Next
+                                <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="x-small"
+                                    class="icon"></lightning-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div if:true={isStep2} class="step-form step-form-2">
+                    <h2 class="section-title">Technical Proposal</h2>
+                    <hr class="section-divider" />
+
+                    <div class="form-step-inner">
+                        <div class="form-group">
+                            <label class="required">* Partner Name</label>
+                            <input type="text" class="form-input" value={formData.partnerName} data-field="partnerName"
+                                oninput={handleInputChange} data-required/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">
+                                * Clearly identify the geographic area and/or communities...
+                            </label>
+                            <textarea class="form-textarea" data-required data-field="geographicImpact"
+                                oninput={handleInputChange} value={formData.geographicImpact}>{formData.geographicImpact}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">
+                                * Describe any existing efforts (either provided by your organization or others in the
+                                community)...
+                            </label>
+                            <textarea class="form-textarea" data-field="existingEfforts"
+                                oninput={handleInputChange} data-required value={formData.existingEfforts}>{formData.existingEfforts}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">
+                                * Please provide a description of any existing budget, funding or resources...
+                            </label>
+                            <textarea class="form-textarea" data-field="existingBudget"
+                                oninput={handleInputChange} data-required value={formData.existingBudget}>{formData.existingBudget}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-navigation dual-align">
+                        <div class="nav-left">
+                            <button class="nav-btn" onclick={handlePrevious}>
+                                <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                                    size="x-small" class="icon"></lightning-icon>
+                                Previous
+                            </button>
+                        </div>
+                        <div class="nav-right">
+                            <button class="nav-btn" onclick={handleNext}>
+                                Next
+                                <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="x-small"
+                                    class="icon"></lightning-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div if:true={isStep3} class="step-form step-form-3">
+                    <h2 class="section-title">Core Abatement Strategy</h2>
+                    <hr class="section-divider">
+
+                    <!-- Main Accordion for Core Strategies -->
+                    <div class="accordion-container">
+                        <template for:each={coreStrategies} for:item="strategy">
+                            <div key={strategy.value} class="strategy-accordion">
+                                <!-- Main Strategy Header -->
+                                <div class="strategy-header" onclick={toggleStrategy} data-strategy={strategy.value}>
+                                    <div class="strategy-circle">
+                                        <span class="strategy-letter">{strategy.letter}</span>
+                                    </div>
+                                    <div class="strategy-title">{strategy.label}</div>
+                                    <div class="expand-icon">
+                                        <lightning-icon icon-name={strategy.iconName} size="small">
+                                        </lightning-icon>
+                                    </div>
+                                </div>
+
+                                <!-- Sub-strategies Content -->
+                                <div if:true={strategy.expanded} class="strategy-content">
+                                    <template for:each={strategy.subStrategies} for:item="subStrategy">
+                                        <div key={subStrategy.value} class="sub-strategy-item">
+                                            <!-- Sub-strategy Header -->
+                                            <div class="sub-strategy-header" onclick={toggleSubStrategy}
+                                                data-strategy={strategy.value} data-sub={subStrategy.value}>
+                                                <div class="sub-strategy-number">
+                                                    <span class="number-text">{subStrategy.number}</span>
+                                                </div>
+                                                <div class="sub-strategy-title">{subStrategy.label}</div>
+                                                <div class="sub-actions">
+                                                    <button class="clear-btn" onclick={clearSubStrategy}
+                                                        data-strategy={strategy.value} data-sub={subStrategy.value}>
+                                                        <lightning-icon icon-name="utility:delete"
+                                                            size="x-small"></lightning-icon>
+                                                        Clear
+                                                    </button>
+                                                    <div class="expand-icon">
+                                                        <lightning-icon icon-name={subStrategy.iconName} size="small">
+                                                        </lightning-icon>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Sub-strategy Form Content -->
+                                            <div if:true={subStrategy.expanded} class="sub-strategy-form">
+                                                <!-- Budget Section -->
+                                                <div class="form-section">
+                                                    <div class="form-row">
+                                                        <div class="form-field half-width">
+                                                            <label class="field-label required">Budget Amount</label>
+                                                            <lightning-input type="number"
+                                                                value={subStrategy.budgetAmount}
+                                                                data-strategy={strategy.value}
+                                                                data-sub={subStrategy.value} data-field="budgetAmount"
+                                                                onchange={handleSubStrategyFieldChange}
+                                                                formatter="currency">
+                                                            </lightning-input>
+                                                        </div>
+                                                        <div class="form-field half-width">
+                                                            <label class="field-label required">Initial or
+                                                                Continuation</label>
+                                                            <lightning-combobox value={subStrategy.initialContinuation}
+                                                                placeholder="Select..."
+                                                                options={initialContinuationOptions}
+                                                                data-strategy={strategy.value}
+                                                                data-sub={subStrategy.value}
+                                                                data-field="initialContinuation"
+                                                                onchange={handleSubStrategyFieldChange}>
+                                                            </lightning-combobox>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="form-field full-width">
+                                                            <label class="field-label required">Budget Narrative</label>
+                                                            <lightning-textarea value={subStrategy.budgetNarrative}
+                                                                rows="3" data-strategy={strategy.value}
+                                                                data-sub={subStrategy.value}
+                                                                data-field="budgetNarrative"
+                                                                onchange={handleSubStrategyFieldChange}>
+                                                            </lightning-textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="form-field full-width">
+                                                            <label class="field-label required">Implementation
+                                                                Plan</label>
+                                                            <lightning-textarea value={subStrategy.implementationPlan}
+                                                                rows="3" data-strategy={strategy.value}
+                                                                data-sub={subStrategy.value}
+                                                                data-field="implementationPlan"
+                                                                onchange={handleSubStrategyFieldChange}>
+                                                            </lightning-textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="form-field full-width">
+                                                            <label class="field-label required">Outcome Measures</label>
+                                                            <lightning-textarea value={subStrategy.outcomeMeasures}
+                                                                rows="3" data-strategy={strategy.value}
+                                                                data-sub={subStrategy.value}
+                                                                data-field="outcomeMeasures"
+                                                                onchange={handleSubStrategyFieldChange}>
+                                                            </lightning-textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="form-field full-width">
+                                                            <label class="field-label required">Process Measures</label>
+                                                            <lightning-textarea value={subStrategy.processMeasures}
+                                                                rows="3" data-strategy={strategy.value}
+                                                                data-sub={subStrategy.value}
+                                                                data-field="processMeasures"
+                                                                onchange={handleSubStrategyFieldChange}>
+                                                            </lightning-textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Personnel Information Section -->
+                                                <div class="form-section">
+                                                    <div class="section-header">
+                                                        <h3 class="section-title-small">Personnel Information</h3>
+                                                        <lightning-icon icon-name="utility:info" size="x-small"
+                                                            class="info-icon"></lightning-icon>
+                                                    </div>
+
+                                                    <template for:each={subStrategy.personnelList} for:item="personnel"
+                                                        for:index="pIndex">
+                                                        <div key={personnel.id} class="personnel-row">
+                                                            <div class="form-row personnel-fields">
+                                                                <div class="form-field personnel-field">
+                                                                    <label class="field-label required">Name</label>
+                                                                    <lightning-input value={personnel.name}
+                                                                        data-strategy={strategy.value}
+                                                                        data-recordid={personnel.id}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-personnel={pIndex} data-field="name"
+                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field personnel-field">
+                                                                    <label class="field-label required">Position</label>
+                                                                    <lightning-input value={personnel.position}
+                                                                        data-strategy={strategy.value}
+                                                                        data-recordid={personnel.id}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-personnel={pIndex} data-field="position"
+                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field personnel-field">
+                                                                    <label class="field-label required">Key Staff Annual Salary</label>
+                                                                    <lightning-input type="number"
+                                                                        value={personnel.salary} formatter="currency"
+                                                                        data-strategy={strategy.value}
+                                                                        data-recordid={personnel.id}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-personnel={pIndex} data-field="salary"
+                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field personnel-field">
+                                                                    <label class="field-label required">Level of Effort</label>
+                                                                    <lightning-input value={personnel.effort}
+                                                                        data-strategy={strategy.value}
+                                                                        data-recordid={personnel.id}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-personnel={pIndex} data-field="effort"
+                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field personnel-field">
+                                                                    <label class="field-label required">Total Charged To Award</label>
+                                                                    <lightning-input type="number"
+                                                                        value={personnel.totalCharged}
+                                                                        data-recordid={personnel.id}
+                                                                        formatter="currency"
+                                                                        data-strategy={strategy.value}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-personnel={pIndex}
+                                                                        data-field="totalCharged"
+                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field action-field">
+                                                                    <!-- <label class="field-label">ACTION</label> -->
+                                                                    <div class="action-buttons">
+                                                                        <button class="add-btn" onclick={addPersonnel}
+                                                                            data-strategy={strategy.value}
+                                                                            data-sub={subStrategy.value}>
+                                                                            <lightning-icon icon-name="utility:add"
+                                                                                size="small"></lightning-icon>
+                                                                        </button>
+                                                                        <template if:true={pIndex}>
+                                                                            <button class="delete-btn"
+                                                                                onclick={removePersonnel}
+                                                                                data-strategy={strategy.value}
+                                                                                data-sub={subStrategy.value}
+                                                                                data-recordid={personnel.id}>
+                                                                                <lightning-icon
+                                                                                    icon-name="utility:delete"
+                                                                                    size="small"></lightning-icon>
+                                                                            </button>
+                                                                        </template>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Budget Information Section -->
+                                                <div class="form-section">
+                                                    <div class="section-header">
+                                                        <h3 class="section-title-small">Budget Information</h3>
+                                                        <lightning-icon icon-name="utility:info" size="x-small"
+                                                            class="info-icon"></lightning-icon>
+                                                    </div>
+                                                    <template for:each={subStrategy.budgetList} for:item="budget"
+                                                        for:index="bIndex">
+                                                        <div key={budget.id} class="budget-row">
+                                                            <div class="form-row budget-fields">
+                                                                <div class="form-field budget-field">
+                                                                    <label class="field-label required">Item</label>
+                                                                    <lightning-input value={budget.item}
+                                                                        data-strategy={strategy.value}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-recordid={budget.id} data-budget={bIndex}
+                                                                        data-field="item"
+                                                                        onchange={handleBudgetFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field budget-field">
+                                                                    <label class="field-label required">Purpose</label>
+                                                                    <lightning-input value={budget.purpose}
+                                                                        data-strategy={strategy.value}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-recordid={budget.id} data-budget={bIndex}
+                                                                        data-field="purpose"
+                                                                        onchange={handleBudgetFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field budget-field">
+                                                                    <label
+                                                                        class="field-label required">Calculation</label>
+                                                                    <lightning-input value={budget.calculation}
+                                                                        data-strategy={strategy.value}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-recordid={budget.id} data-budget={bIndex}
+                                                                        data-field="calculation"
+                                                                        onchange={handleBudgetFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field budget-field">
+                                                                    <label class="field-label required">Total Charged To Award</label>
+                                                                    <lightning-input type="number"
+                                                                        value={budget.totalCharged}
+                                                                        data-recordid={budget.id} formatter="currency"
+                                                                        data-strategy={strategy.value}
+                                                                        data-sub={subStrategy.value}
+                                                                        data-budget={bIndex} data-field="totalCharged"
+                                                                        onchange={handleBudgetFieldChange}>
+                                                                    </lightning-input>
+                                                                </div>
+                                                                <div class="form-field action-field">
+                                                                    <!-- <label class="field-label">ACTION</label> -->
+                                                                    <div class="action-buttons">
+                                                                        <button class="add-btn" onclick={addBudgetItem}
+                                                                            data-strategy={strategy.value}
+                                                                            data-sub={subStrategy.value}>
+                                                                            <lightning-icon icon-name="utility:add"
+                                                                                size="small"></lightning-icon>
+                                                                        </button>
+                                                                        <template if:true={bIndex}>
+                                                                            <button class="delete-btn"
+                                                                                onclick={removeBudgetItem}
+                                                                                data-strategy={strategy.value}
+                                                                                data-sub={subStrategy.value}
+                                                                                data-recordid={budget.id}>
+                                                                                <lightning-icon
+                                                                                    icon-name="utility:delete"
+                                                                                    size="small"></lightning-icon>
+                                                                            </button>
+                                                                        </template>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="form-navigation dual-align">
+                        <div class="nav-left">
+                            <button class="nav-btn" onclick={handlePrevious}>
+                                <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                                    size="x-small" class="icon"></lightning-icon>
+                                Previous
+                            </button>
+                        </div>
+                        <div class="nav-right">
+                            <button class="nav-btn" onclick={handleAddPartner}>
+                                <lightning-icon icon-name="utility:add" alternative-text="Add Partner" size="x-small"
+                                    class="icon"></lightning-icon>
+                                Add Partner
+                            </button>
+                            <button class="nav-btn save-btn" onclick={handleSaveExit}>
+                                <lightning-icon icon-name="utility:save" alternative-text="Save & Exit" size="x-small"
+                                    class="icon"></lightning-icon>
+                                Save & Exit
+                            </button>
+                            <button class="nav-btn" onclick={handleNext}>
+                                Next
+                                <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="x-small"
+                                    class="icon"></lightning-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div if:true={isStep4} class="step-form step-form-4">
+                    <h2 class="section-title">Overall Budget</h2>
+                    <hr class="section-divider" />
+
+                    <div class="form-fields">
+                        <div class="field-group">
+                            <label class="field-label">* Total Project Budget</label>
+                            <input type="number" class="field-input" data-field="totalBudget"
+                                value={formData.totalBudget} disabled />
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Minus Estimated Carry Forward Amount</label>
+                            <input type="number" class="field-input" data-field="carryForward"
+                                value={formData.carryForward} onchange={handleInputChange} />
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Minus Estimated Interest Earned</label>
+                            <input type="number" class="field-input" data-field="interestEarned"
+                                value={formData.interestEarned} onchange={handleInputChange} />
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">* Total Amount Requested</label>
+                            <input type="number" class="field-input" data-field="amountRequested"
+                                value={formData.amountRequested} disabled />
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top: 3rem;">Certification of Contents</h2>
+                    <label class="field-label">
+                        The Information provided in this application for SC Opioid Recovery Funds is true, complete, and
+                        accurate and all funds requested will only be used for approved purpose. In the event an
+                        applicant entity/organization is approved to receive funds from the SC Opioid Recovery Fund, the
+                        undersigned (authorized official signing for the applicant entity/organization) certifies that
+                        any false , fictitious, or fradulent statements or claims may subject him or her to criminak,
+                        civil, or administrative penalties
+                    </label>
+                    <hr class="section-divider" />
+
+                    <div class="form-fields">
+                        <div class="field-group">
+                            <label class="field-label">* Electronic Signature</label>
+                            <input type="text" class="field-input" data-field="electronicSignature"
+                                value={formData.electronicSignature} onchange={handleInputChange} />
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">* Date</label>
+                            <input type="date" class="field-input" data-field="signatureDate"
+                                value={formData.signatureDate} disabled />
+                        </div>
+                    </div>
+
+                    <div class="form-navigation dual-align">
+                        <div class="nav-left">
+                            <button class="nav-btn" onclick={handlePrevious}>
+                                <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                                    size="x-small" class="icon"></lightning-icon>
+                                Previous
+                            </button>
+                        </div>
+                        <div class="nav-right">
+                            <button class="nav-btn" onclick={handleSubmit}>
+                                <lightning-icon icon-name="utility:preview" alternative-text="Save & Preview"
+                                    size="x-small" class="icon"></lightning-icon>
+                                Save & Preview
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

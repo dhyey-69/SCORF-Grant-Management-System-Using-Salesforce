@@ -1,0 +1,102 @@
+.sidebar {
+    width: 240px;
+    background-color: #f8f9fa;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.profile-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 24px 16px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #d6d6d6;
+    border-radius: 50%;
+    margin: 0 auto 16px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar lightning-icon {
+    color: #7a7a7a;
+}
+
+.user-details {
+    line-height: 1.4;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 4px;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 2px;
+}
+
+.user-phone {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    color: #495057;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    font-size: 14px;
+}
+
+.nav-item:hover {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.nav-item.active {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: 500;
+}
+
+.nav-item lightning-icon {
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.nav-item.active lightning-icon {
+    color: #1976d2;
+}
+
+.nav-item:hover lightning-icon {
+    color: #1976d2;
+}
+
+.nav-label {
+    font-size: 14px;
+    white-space: nowrap;
+}

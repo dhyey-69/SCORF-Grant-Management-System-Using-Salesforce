@@ -1,0 +1,39 @@
+<template>
+    <div class="sidebar">
+        <div class="profile-card">
+            <div class="profile-avatar">
+                <lightning-icon icon-name="utility:user" size="large" alternative-text="User Icon"></lightning-icon>            
+            </div>
+            <div class="user-details">
+                <div class="user-name">{user.name}</div>
+                <div class="user-email">{user.email}</div>
+                <div class="user-phone">{user.phone}</div>
+            </div>
+        </div>
+        
+        <div class="nav-menu">
+            <ul>
+                <li class="nav-item active" onclick={handleNavClick} data-nav="dashboard">
+                    <lightning-icon icon-name="utility:home" size="x-small" alternative-text="Dashboard"></lightning-icon>
+                    <span class="nav-label">Dashboard</span>
+                </li>
+                <li class="nav-item" onclick={handleNavClick} data-nav="projects">
+                    <lightning-icon icon-name="utility:apps" size="x-small" alternative-text="Projects"></lightning-icon>
+                    <span class="nav-label">Projects</span>
+                </li>
+                <li class="nav-item" onclick={handleNavClick} data-nav="letter">
+                    <lightning-icon icon-name="utility:file" size="x-small" alternative-text="Letter of Intent"></lightning-icon>
+                    <span class="nav-label">Letter of Intent</span>
+                </li>
+                <li class="nav-item" onclick={handleNavClick} data-nav="reports">
+                    <lightning-icon icon-name="utility:chart" size="x-small" alternative-text="Reports"></lightning-icon>
+                    <span class="nav-label">Reports</span>
+                </li>
+                <li class="nav-item" onclick={handleNavClick} data-nav="closeout">
+                    <lightning-icon icon-name="utility:refresh" size="x-small" alternative-text="Close Out Package"></lightning-icon>
+                    <span class="nav-label">Close Out Package</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</template>
