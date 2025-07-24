@@ -1,0 +1,241 @@
+.custom-modal {
+    max-width: 80vw; /* or 1000px, 1200px as you prefer */
+    width: 100%;
+}
+
+.preview-modal-content {
+    margin: 0.5rem;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.203);
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.heading {
+    font-size: 16px;
+    background-color: #F9F9F9;
+    border: 0.5px solid rgba(0, 0, 0, 0.203);
+    border-radius: 0.3rem;
+    padding: 0.5rem;
+}
+
+.section-header {
+    margin-top: 1rem;
+    background-color: #143158; /* Dark blue */
+    padding: 0.5rem;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.section-icon {
+    --slds-c-icon-color-foreground-default: white;
+    --slds-c-icon-color-background: #143158;
+    padding-left: 0.5rem;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 4rem;
+    border: 0.5px solid rgba(0, 0, 0, 0.203);
+    padding: 1rem;
+    font-size: 13.5px;
+    margin-bottom: 1.5rem;
+    border-bottom-left-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+    border-top: none;
+}
+
+.preview-grid p {
+    margin: 0.5rem 0;
+    line-height: 1.4;
+}
+
+label {
+    font-weight: bold;
+    color: #143158;
+    margin-right: 0.5rem;
+}
+
+.lightning-input {
+    margin-left: 0.5rem;
+}
+
+/* Partner Table Styles */
+.partner-table-container {
+    border: 0.5px solid rgba(0, 0, 0, 0.203);
+    border-top: none;
+    border-bottom-left-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.partner-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.partner-table th,
+.partner-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+    vertical-align: middle;
+}
+
+.partner-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #143158;
+    border-bottom: 2px solid #143158;
+}
+
+.partner-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.partner-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.action-btn {
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.view-btn {
+    background-color: #4c63d2;
+    color: white;
+}
+
+.view-btn:hover {
+    background-color: #3a4bc4;
+}
+
+.edit-btn {
+    background-color: #4c63d2;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #3a4bc4;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.no-partners {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* Consent Section */
+.consent-section {
+    margin: 1.5rem 0;
+}
+
+.consent-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.consent-checkbox .slds-checkbox {
+    margin-top: 0.2rem;
+}
+
+.button-grid {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+.footer-btn {
+    --slds-c-icon-color-foreground-default: #ffffff;
+    background-color: #2F32AC;
+    color: #ffffff;
+    border-radius: 0.8rem;
+    border: 1.5px solid #ffffff;
+    padding: 0.5rem 1.5rem;
+    font-size: 16px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+    width: 9rem;
+}
+
+.footer-btn:hover {
+    background-color: #ffffff;
+    color: #2F32AC;
+    --slds-c-icon-color-foreground-default: #2F32AC;
+    border: 1px solid #2F32AC;
+}
+
+.icon-left {
+    margin-right: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .custom-modal {
+        max-width: 95vw;
+    }
+    
+    .preview-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .partner-table {
+        font-size: 12px;
+    }
+    
+    .partner-table th,
+    .partner-table td {
+        padding: 0.5rem;
+    }
+    
+    .action-btn {
+        padding: 0.2rem 0.5rem;
+        font-size: 11px;
+    }
+}

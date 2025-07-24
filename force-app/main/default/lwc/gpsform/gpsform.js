@@ -19,6 +19,7 @@ export default class Gpsform extends LightningElement {
     @track entityTypeOptions = [];
     @track countyOptions = [];
     stateOptions = [];
+    @track showModal = false; 
 
     formDataTarget = {};
     @track formData = new Proxy(this.formDataTarget, {
@@ -41,7 +42,7 @@ export default class Gpsform extends LightningElement {
             this.fundTypeOptions = data.Request_Type__c || [];
             this.entityTypeOptions = data.Entity_Type__c || [];
             this.countyOptions = data.Please_select_the_appropriate_county__c || [];
-            this.stateOptions = data.State__c || [];
+            this.stateOptions = data.State__c || []; // 🔥 You got State now!
         } else if (error) {
             console.error('Error loading Funding picklists:', error);
         }
@@ -204,8 +205,12 @@ export default class Gpsform extends LightningElement {
                 validate = this.formData[dep] === val;
             }
 
-            const value = this.formData[field];
-            const empty = !value || (Array.isArray(value) && value.length === 0);
+            let value = this.formData[field];
+            if (typeof value === 'string') {
+                value = value.trim();
+            }
+            const empty = value === '' || value === null || value === undefined || (Array.isArray(value) && value.length === 0);
+
 
             let hasError = false;
             input.classList.remove('error');
@@ -219,6 +224,7 @@ export default class Gpsform extends LightningElement {
                 invalid.push(field);
                 hasError = true;
             }
+
 
             if (hasError) input.classList.add('error');
         });
@@ -311,17 +317,40 @@ export default class Gpsform extends LightningElement {
 
     handleNext() {
         const stepSelector = `.step-form-${this.currentStep}`;
+        
         if (!this.validateCurrentStep(stepSelector)) return;
+
+        if (this.currentStep === 3 && !this.validateBudgetAmounts()) {
+            return;
+        }
+
         this.currentStep++;
         if (this.currentStep === 4) this.setTodayDateIfMissing();
     }
+
 
     handlePrevious() {
         if (this.currentStep > 1) this.currentStep--;
     }
 
-    handleSubmit() { console.log('Form submitted:', JSON.stringify(this.formData, null, 2)); }
-    handleSaveExit() { console.log('Save & Exit clicked:', JSON.stringify(this.formData, null, 2)); }
+    handleSubmit() { 
+        console.log('Form submitted:', JSON.stringify(this.formData, null, 2)); 
+        this.showModal = true; 
+        console.log('Save & Preview is Clicked');
+        const stepSelector = `.step-form-${this.currentStep}`;
+        
+        if (!this.validateCurrentStep(stepSelector)) return;
+    }
+    handleSaveExit() {
+        console.log('Save & Exit clicked:');
+        console.log('Form Data:', JSON.stringify(this.formData, null, 2));
+        console.log('Core Strategies:', JSON.stringify(this.coreStrategies, null, 2));
+    }
+
+    handleModalClose() {
+        this.showModal = false;
+    }
+
     handleAddPartner() { console.log('Add Partner clicked'); }
 
     // UI Helpers
@@ -348,4 +377,63 @@ export default class Gpsform extends LightningElement {
     get connector1Class() { return `step-connector${this.currentStep >= 2 ? ' active' : ''}`; }
     get connector2Class() { return `step-connector${this.currentStep >= 3 ? ' active' : ''}`; }
     get connector3Class() { return `step-connector${this.currentStep >= 4 ? ' active' : ''}`; }
+
+    validateBudgetAmounts() {
+        let isValid = true;
+        let errorFound = false;
+        let firstErrorMessage = '';
+
+        this.coreStrategies = this.coreStrategies.map(strategy => {
+            return {
+                ...strategy,
+                subStrategies: strategy.subStrategies.map(sub => {
+                    let totalCharged = 0;
+
+                    // Sum personnelList
+                    sub.personnelList.forEach(p => {
+                        const val = parseFloat(p.totalCharged);
+                        if (!isNaN(val)) totalCharged += val;
+                    });
+
+                    // Sum budgetList
+                    sub.budgetList.forEach(b => {
+                        const val = parseFloat(b.totalCharged);
+                        if (!isNaN(val)) totalCharged += val;
+                    });
+
+                    const budgetAmount = parseFloat(sub.budgetAmount) || 0;
+                    let validationError = '';
+
+                    if (totalCharged !== budgetAmount) {
+                        validationError = `Total Charged (${totalCharged}) must exactly equal Budget Amount (${budgetAmount}).`;
+                        isValid = false;
+                        errorFound = true;
+
+                        if (!firstErrorMessage) {
+                            firstErrorMessage = validationError;
+                        }
+                    }
+
+                    return {
+                        ...sub,
+                        validationError
+                    };
+                })
+            };
+        });
+
+        if (errorFound) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Budget Validation Error',
+                    message: firstErrorMessage, // Show the same message as validationError
+                    variant: 'error'
+                })
+            );
+        }
+
+        return isValid;
+    }
+
+
 }

@@ -84,14 +84,14 @@
                         <div class="field-group">
                             <label class="field-label">* Name of Person Completing Form</label>
                             <input type="text" class="field-input" value={formData.nameOfPersonCompletingForm}
-                                data-field="nameOfPersonCompletingForm" oninput={handleInputChange} data-required/>
+                                data-field="nameOfPersonCompletingForm" oninput={handleInputChange} data-pattern="^[A-Za-z\s]+$" data-required/>
                         </div>
 
                         <!-- SCEIS Vendor Number -->
                         <div class="field-group">
                             <label class="field-label">SCEIS Vendor Number</label>
                             <input type="text" class="field-input" value={formData.sceisVendorNumber}
-                                data-field="sceisVendorNumber" oninput={handleInputChange}/>
+                                data-field="sceisVendorNumber" oninput={handleInputChange} data-pattern="^\d+$"/>
                         </div>
 
                         <!-- Entity Type -->
@@ -119,6 +119,7 @@
                                     value={formData.otherEntityType}
                                     onchange={handleInputChange}
                                     data-required-if="entityType=Other"
+                                    data-pattern="^[A-Za-z\s]+$"
                                     placeholder="Specify other entity type">
                                 </lightning-input>
                             </div>
@@ -213,6 +214,7 @@
                                 <lightning-textarea
                                     name="conflictExplanation"
                                     data-field="conflictExplanation"
+                                    data-pattern="^[A-Za-z\s]+$"
                                     value={formData.conflictExplanation}
                                     onchange={handleInputChange}
                                     data-required-if="conflictOfInterest=Yes"
@@ -254,19 +256,19 @@
                         <div class="field-group">
                             <label class="field-label">* Address Line 1</label>
                             <input type="text" class="field-input" value={formData.paymentAddress1}
-                                data-field="paymentAddress1" oninput={handleInputChange} data-required />
+                                data-field="paymentAddress1" oninput={handleInputChange} data-pattern="^[A-Za-z0-9\s.,#-]+$" data-required />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">Address Line 2</label>
                             <input type="text" class="field-input" value={formData.paymentAddress2}
-                                data-field="paymentAddress2" oninput={handleInputChange} />
+                                data-field="paymentAddress2" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* City</label>
                             <input type="text" class="field-input" value={formData.paymentCity} data-field="paymentCity"
-                                oninput={handleInputChange} data-required/>
+                                oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
                         </div>
 
                         <div class="field-group">
@@ -298,19 +300,19 @@
                         <div class="field-group">
                             <label class="field-label">* Address Line 1</label>
                             <input type="text" class="field-input" value={formData.subdivisionAddress1}
-                                data-field="subdivisionAddress1" oninput={handleInputChange} data-required/>
+                                data-field="subdivisionAddress1" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">Address Line 2</label>
                             <input type="text" class="field-input" value={formData.subdivisionAddress2}
-                                data-field="subdivisionAddress2" oninput={handleInputChange} />
+                                data-field="subdivisionAddress2" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* City</label>
                             <input type="text" class="field-input" value={formData.subdivisionCity}
-                                data-field="subdivisionCity" oninput={handleInputChange} data-required/>
+                                data-field="subdivisionCity" oninput={handleInputChange} data-pattern="^[A-Za-z\s]+$" data-required/>
                         </div>
 
                         <div class="field-group">
@@ -343,13 +345,13 @@
                         <div class="field-group">
                             <label class="field-label">* Program Manager Name</label>
                             <input type="text" class="field-input" value={formData.programManagerName}
-                                data-field="programManagerName" oninput={handleInputChange} data-required/>
+                                data-field="programManagerName" oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Fiscal Manager Name</label>
                             <input type="text" class="field-input" value={formData.fiscalManagerName}
-                                data-field="fiscalManagerName" oninput={handleInputChange} data-required/>
+                                data-field="fiscalManagerName" oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
                         </div>
 
                         <div class="field-group">
@@ -402,7 +404,7 @@
                         <div class="form-group">
                             <label class="required">* Partner Name</label>
                             <input type="text" class="form-input" value={formData.partnerName} data-field="partnerName"
-                                oninput={handleInputChange} data-required/>
+                                oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
                         </div>
 
                         <div class="form-group">
@@ -410,7 +412,7 @@
                                 * Clearly identify the geographic area and/or communities...
                             </label>
                             <textarea class="form-textarea" data-required data-field="geographicImpact"
-                                oninput={handleInputChange} value={formData.geographicImpact}>{formData.geographicImpact}</textarea>
+                                oninput={handleInputChange} data-pattern="^[A-Za-z0-9\s.,#-]+$" value={formData.geographicImpact}>{formData.geographicImpact}</textarea>
                         </div>
 
                         <div class="form-group">
@@ -419,7 +421,7 @@
                                 community)...
                             </label>
                             <textarea class="form-textarea" data-field="existingEfforts"
-                                oninput={handleInputChange} data-required value={formData.existingEfforts}>{formData.existingEfforts}</textarea>
+                                oninput={handleInputChange} data-pattern="^[A-Za-z0-9\s.,#-]+$" data-required value={formData.existingEfforts}>{formData.existingEfforts}</textarea>
                         </div>
 
                         <div class="form-group">
@@ -427,7 +429,7 @@
                                 * Please provide a description of any existing budget, funding or resources...
                             </label>
                             <textarea class="form-textarea" data-field="existingBudget"
-                                oninput={handleInputChange} data-required value={formData.existingBudget}>{formData.existingBudget}</textarea>
+                                oninput={handleInputChange} data-pattern="^[A-Za-z0-9\s.,#-]+$" data-required value={formData.existingBudget}>{formData.existingBudget}</textarea>
                         </div>
                     </div>
 
@@ -496,167 +498,89 @@
 
                                             <!-- Sub-strategy Form Content -->
                                             <div if:true={subStrategy.expanded} class="sub-strategy-form">
-                                                <!-- Budget Section -->
                                                 <div class="form-section">
                                                     <div class="form-row">
                                                         <div class="form-field half-width">
                                                             <label class="field-label required">Budget Amount</label>
-                                                            <lightning-input type="number"
-                                                                value={subStrategy.budgetAmount}
-                                                                data-strategy={strategy.value}
-                                                                data-sub={subStrategy.value} data-field="budgetAmount"
-                                                                onchange={handleSubStrategyFieldChange}
-                                                                formatter="currency">
-                                                            </lightning-input>
+                                                            <lightning-input type="number" value={subStrategy.budgetAmount} data-strategy={strategy.value} data-sub={subStrategy.value} data-field="budgetAmount" onchange={handleSubStrategyFieldChange} formatter="currency"></lightning-input>
                                                         </div>
                                                         <div class="form-field half-width">
-                                                            <label class="field-label required">Initial or
-                                                                Continuation</label>
-                                                            <lightning-combobox value={subStrategy.initialContinuation}
-                                                                placeholder="Select..."
-                                                                options={initialContinuationOptions}
-                                                                data-strategy={strategy.value}
-                                                                data-sub={subStrategy.value}
-                                                                data-field="initialContinuation"
-                                                                onchange={handleSubStrategyFieldChange}>
-                                                            </lightning-combobox>
+                                                            <label class="field-label required">Initial or Continuation</label>
+                                                            <lightning-combobox value={subStrategy.initialContinuation} placeholder="Select..." options={initialContinuationOptions} data-strategy={strategy.value} data-sub={subStrategy.value} data-field="initialContinuation" onchange={handleSubStrategyFieldChange}></lightning-combobox>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-row">
                                                         <div class="form-field full-width">
                                                             <label class="field-label required">Budget Narrative</label>
-                                                            <lightning-textarea value={subStrategy.budgetNarrative}
-                                                                rows="3" data-strategy={strategy.value}
-                                                                data-sub={subStrategy.value}
-                                                                data-field="budgetNarrative"
-                                                                onchange={handleSubStrategyFieldChange}>
-                                                            </lightning-textarea>
+                                                            <lightning-textarea value={subStrategy.budgetNarrative} rows="3" data-strategy={strategy.value} data-sub={subStrategy.value} data-field="budgetNarrative" onchange={handleSubStrategyFieldChange}></lightning-textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-row">
                                                         <div class="form-field full-width">
-                                                            <label class="field-label required">Implementation
-                                                                Plan</label>
-                                                            <lightning-textarea value={subStrategy.implementationPlan}
-                                                                rows="3" data-strategy={strategy.value}
-                                                                data-sub={subStrategy.value}
-                                                                data-field="implementationPlan"
-                                                                onchange={handleSubStrategyFieldChange}>
-                                                            </lightning-textarea>
+                                                            <label class="field-label required">Implementation Plan</label>
+                                                            <lightning-textarea value={subStrategy.implementationPlan} rows="3" data-strategy={strategy.value} data-sub={subStrategy.value} data-field="implementationPlan" onchange={handleSubStrategyFieldChange}></lightning-textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-row">
                                                         <div class="form-field full-width">
                                                             <label class="field-label required">Outcome Measures</label>
-                                                            <lightning-textarea value={subStrategy.outcomeMeasures}
-                                                                rows="3" data-strategy={strategy.value}
-                                                                data-sub={subStrategy.value}
-                                                                data-field="outcomeMeasures"
-                                                                onchange={handleSubStrategyFieldChange}>
-                                                            </lightning-textarea>
+                                                            <lightning-textarea value={subStrategy.outcomeMeasures} rows="3" data-strategy={strategy.value} data-sub={subStrategy.value} data-field="outcomeMeasures" onchange={handleSubStrategyFieldChange}></lightning-textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-row">
                                                         <div class="form-field full-width">
                                                             <label class="field-label required">Process Measures</label>
-                                                            <lightning-textarea value={subStrategy.processMeasures}
-                                                                rows="3" data-strategy={strategy.value}
-                                                                data-sub={subStrategy.value}
-                                                                data-field="processMeasures"
-                                                                onchange={handleSubStrategyFieldChange}>
-                                                            </lightning-textarea>
+                                                            <lightning-textarea value={subStrategy.processMeasures} rows="3" data-strategy={strategy.value} data-sub={subStrategy.value} data-field="processMeasures" onchange={handleSubStrategyFieldChange}></lightning-textarea>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <!-- Personnel Information Section -->
                                                 <div class="form-section">
                                                     <div class="section-header">
                                                         <h3 class="section-title-small">Personnel Information</h3>
-                                                        <lightning-icon icon-name="utility:info" size="x-small"
-                                                            class="info-icon"></lightning-icon>
+                                                        <lightning-icon icon-name="utility:info" size="x-small" class="info-icon"></lightning-icon>
                                                     </div>
 
-                                                    <template for:each={subStrategy.personnelList} for:item="personnel"
-                                                        for:index="pIndex">
+                                                    <template for:each={subStrategy.personnelList} for:item="personnel" for:index="pIndex">
                                                         <div key={personnel.id} class="personnel-row">
                                                             <div class="form-row personnel-fields">
                                                                 <div class="form-field personnel-field">
                                                                     <label class="field-label required">Name</label>
-                                                                    <lightning-input value={personnel.name}
-                                                                        data-strategy={strategy.value}
-                                                                        data-recordid={personnel.id}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-personnel={pIndex} data-field="name"
-                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    <lightning-input value={personnel.name} data-strategy={strategy.value} data-recordid={personnel.id} data-sub={subStrategy.value} data-personnel={pIndex} data-field="name" onchange={handlePersonnelFieldChange}>
                                                                     </lightning-input>
                                                                 </div>
                                                                 <div class="form-field personnel-field">
                                                                     <label class="field-label required">Position</label>
-                                                                    <lightning-input value={personnel.position}
-                                                                        data-strategy={strategy.value}
-                                                                        data-recordid={personnel.id}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-personnel={pIndex} data-field="position"
-                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    <lightning-input value={personnel.position} data-strategy={strategy.value} data-recordid={personnel.id} data-sub={subStrategy.value} data-personnel={pIndex} data-field="position" onchange={handlePersonnelFieldChange}>
                                                                     </lightning-input>
                                                                 </div>
                                                                 <div class="form-field personnel-field">
                                                                     <label class="field-label required">Key Staff Annual Salary</label>
-                                                                    <lightning-input type="number"
-                                                                        value={personnel.salary} formatter="currency"
-                                                                        data-strategy={strategy.value}
-                                                                        data-recordid={personnel.id}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-personnel={pIndex} data-field="salary"
-                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    <lightning-input type="number" value={personnel.salary} formatter="currency" data-strategy={strategy.value} data-recordid={personnel.id} data-sub={subStrategy.value} data-personnel={pIndex} data-field="salary" onchange={handlePersonnelFieldChange}>
                                                                     </lightning-input>
                                                                 </div>
                                                                 <div class="form-field personnel-field">
                                                                     <label class="field-label required">Level of Effort</label>
-                                                                    <lightning-input value={personnel.effort}
-                                                                        data-strategy={strategy.value}
-                                                                        data-recordid={personnel.id}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-personnel={pIndex} data-field="effort"
-                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    <lightning-input value={personnel.effort} data-strategy={strategy.value} data-recordid={personnel.id} data-sub={subStrategy.value} data-personnel={pIndex} data-field="effort" onchange={handlePersonnelFieldChange}>
                                                                     </lightning-input>
                                                                 </div>
                                                                 <div class="form-field personnel-field">
                                                                     <label class="field-label required">Total Charged To Award</label>
-                                                                    <lightning-input type="number"
-                                                                        value={personnel.totalCharged}
-                                                                        data-recordid={personnel.id}
-                                                                        formatter="currency"
-                                                                        data-strategy={strategy.value}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-personnel={pIndex}
-                                                                        data-field="totalCharged"
-                                                                        onchange={handlePersonnelFieldChange}>
+                                                                    <lightning-input type="number" value={personnel.totalCharged} data-recordid={personnel.id} formatter="currency" data-strategy={strategy.value} data-sub={subStrategy.value} data-personnel={pIndex} data-field="totalCharged" onchange={handlePersonnelFieldChange}>
                                                                     </lightning-input>
                                                                 </div>
                                                                 <div class="form-field action-field">
-                                                                    <!-- <label class="field-label">ACTION</label> -->
                                                                     <div class="action-buttons">
-                                                                        <button class="add-btn" onclick={addPersonnel}
-                                                                            data-strategy={strategy.value}
-                                                                            data-sub={subStrategy.value}>
-                                                                            <lightning-icon icon-name="utility:add"
-                                                                                size="small"></lightning-icon>
+                                                                        <button class="add-btn" onclick={addPersonnel} data-strategy={strategy.value} data-sub={subStrategy.value}>
+                                                                            <lightning-icon icon-name="utility:add" size="small"></lightning-icon>
                                                                         </button>
                                                                         <template if:true={pIndex}>
-                                                                            <button class="delete-btn"
-                                                                                onclick={removePersonnel}
-                                                                                data-strategy={strategy.value}
-                                                                                data-sub={subStrategy.value}
-                                                                                data-recordid={personnel.id}>
-                                                                                <lightning-icon
-                                                                                    icon-name="utility:delete"
-                                                                                    size="small"></lightning-icon>
+                                                                            <button class="delete-btn" onclick={removePersonnel} data-strategy={strategy.value} data-sub={subStrategy.value} data-recordid={personnel.id}>
+                                                                                <lightning-icon icon-name="utility:delete" size="small"></lightning-icon>
                                                                             </button>
                                                                         </template>
                                                                     </div>
@@ -666,77 +590,38 @@
                                                     </template>
                                                 </div>
 
-                                                <!-- Budget Information Section -->
                                                 <div class="form-section">
                                                     <div class="section-header">
                                                         <h3 class="section-title-small">Budget Information</h3>
-                                                        <lightning-icon icon-name="utility:info" size="x-small"
-                                                            class="info-icon"></lightning-icon>
+                                                        <lightning-icon icon-name="utility:info" size="x-small" class="info-icon"></lightning-icon>
                                                     </div>
-                                                    <template for:each={subStrategy.budgetList} for:item="budget"
-                                                        for:index="bIndex">
+                                                    <template for:each={subStrategy.budgetList} for:item="budget" for:index="bIndex">
                                                         <div key={budget.id} class="budget-row">
                                                             <div class="form-row budget-fields">
                                                                 <div class="form-field budget-field">
                                                                     <label class="field-label required">Item</label>
-                                                                    <lightning-input value={budget.item}
-                                                                        data-strategy={strategy.value}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-recordid={budget.id} data-budget={bIndex}
-                                                                        data-field="item"
-                                                                        onchange={handleBudgetFieldChange}>
-                                                                    </lightning-input>
+                                                                    <lightning-input value={budget.item} data-strategy={strategy.value} data-sub={subStrategy.value} data-recordid={budget.id} data-budget={bIndex} data-field="item" onchange={handleBudgetFieldChange}></lightning-input>
                                                                 </div>
                                                                 <div class="form-field budget-field">
                                                                     <label class="field-label required">Purpose</label>
-                                                                    <lightning-input value={budget.purpose}
-                                                                        data-strategy={strategy.value}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-recordid={budget.id} data-budget={bIndex}
-                                                                        data-field="purpose"
-                                                                        onchange={handleBudgetFieldChange}>
-                                                                    </lightning-input>
+                                                                    <lightning-input value={budget.purpose} data-strategy={strategy.value} data-sub={subStrategy.value} data-recordid={budget.id} data-budget={bIndex} data-field="purpose" onchange={handleBudgetFieldChange}></lightning-input>
                                                                 </div>
                                                                 <div class="form-field budget-field">
-                                                                    <label
-                                                                        class="field-label required">Calculation</label>
-                                                                    <lightning-input value={budget.calculation}
-                                                                        data-strategy={strategy.value}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-recordid={budget.id} data-budget={bIndex}
-                                                                        data-field="calculation"
-                                                                        onchange={handleBudgetFieldChange}>
-                                                                    </lightning-input>
+                                                                    <label class="field-label required">Calculation</label>
+                                                                    <lightning-input value={budget.calculation} data-strategy={strategy.value} data-sub={subStrategy.value} data-recordid={budget.id} data-budget={bIndex} data-field="calculation" onchange={handleBudgetFieldChange}></lightning-input>
                                                                 </div>
                                                                 <div class="form-field budget-field">
                                                                     <label class="field-label required">Total Charged To Award</label>
-                                                                    <lightning-input type="number"
-                                                                        value={budget.totalCharged}
-                                                                        data-recordid={budget.id} formatter="currency"
-                                                                        data-strategy={strategy.value}
-                                                                        data-sub={subStrategy.value}
-                                                                        data-budget={bIndex} data-field="totalCharged"
-                                                                        onchange={handleBudgetFieldChange}>
-                                                                    </lightning-input>
+                                                                    <lightning-input type="number" value={budget.totalCharged} data-recordid={budget.id} formatter="currency" data-strategy={strategy.value} data-sub={subStrategy.value} data-budget={bIndex} data-field="totalCharged" onchange={handleBudgetFieldChange}></lightning-input>
                                                                 </div>
                                                                 <div class="form-field action-field">
-                                                                    <!-- <label class="field-label">ACTION</label> -->
                                                                     <div class="action-buttons">
-                                                                        <button class="add-btn" onclick={addBudgetItem}
-                                                                            data-strategy={strategy.value}
-                                                                            data-sub={subStrategy.value}>
-                                                                            <lightning-icon icon-name="utility:add"
-                                                                                size="small"></lightning-icon>
+                                                                        <button class="add-btn" onclick={addBudgetItem} data-strategy={strategy.value} data-sub={subStrategy.value}>
+                                                                            <lightning-icon icon-name="utility:add" size="small"></lightning-icon>
                                                                         </button>
                                                                         <template if:true={bIndex}>
-                                                                            <button class="delete-btn"
-                                                                                onclick={removeBudgetItem}
-                                                                                data-strategy={strategy.value}
-                                                                                data-sub={subStrategy.value}
-                                                                                data-recordid={budget.id}>
-                                                                                <lightning-icon
-                                                                                    icon-name="utility:delete"
-                                                                                    size="small"></lightning-icon>
+                                                                            <button class="delete-btn" onclick={removeBudgetItem} data-strategy={strategy.value} data-sub={subStrategy.value} data-recordid={budget.id}>
+                                                                                <lightning-icon icon-name="utility:delete" size="small"></lightning-icon>
                                                                             </button>
                                                                         </template>
                                                                     </div>
@@ -753,30 +638,25 @@
                         </template>
                     </div>
 
-                    <!-- Navigation -->
                     <div class="form-navigation dual-align">
                         <div class="nav-left">
                             <button class="nav-btn" onclick={handlePrevious}>
-                                <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
-                                    size="x-small" class="icon"></lightning-icon>
+                                <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous" size="x-small" class="icon"></lightning-icon>
                                 Previous
                             </button>
                         </div>
                         <div class="nav-right">
                             <button class="nav-btn" onclick={handleAddPartner}>
-                                <lightning-icon icon-name="utility:add" alternative-text="Add Partner" size="x-small"
-                                    class="icon"></lightning-icon>
+                                <lightning-icon icon-name="utility:add" alternative-text="Add Partner" size="x-small" class="icon"></lightning-icon>
                                 Add Partner
                             </button>
                             <button class="nav-btn save-btn" onclick={handleSaveExit}>
-                                <lightning-icon icon-name="utility:save" alternative-text="Save & Exit" size="x-small"
-                                    class="icon"></lightning-icon>
+                                <lightning-icon icon-name="utility:save" alternative-text="Save & Exit" size="x-small" class="icon"></lightning-icon>
                                 Save & Exit
                             </button>
                             <button class="nav-btn" onclick={handleNext}>
                                 Next
-                                <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="x-small"
-                                    class="icon"></lightning-icon>
+                                <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="x-small" class="icon"></lightning-icon>
                             </button>
                         </div>
                     </div>
@@ -790,25 +670,25 @@
                         <div class="field-group">
                             <label class="field-label">* Total Project Budget</label>
                             <input type="number" class="field-input" data-field="totalBudget"
-                                value={formData.totalBudget} disabled />
+                                value={formData.totalBudget} min="0" step="0.01" disabled />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Minus Estimated Carry Forward Amount</label>
                             <input type="number" class="field-input" data-field="carryForward"
-                                value={formData.carryForward} onchange={handleInputChange} />
+                                value={formData.carryForward} min="0" step="0.01" data-pattern="^\d+$" onchange={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Minus Estimated Interest Earned</label>
                             <input type="number" class="field-input" data-field="interestEarned"
-                                value={formData.interestEarned} onchange={handleInputChange} />
+                                value={formData.interestEarned} min="0" step="0.01" data-pattern="^\d+$" onchange={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Total Amount Requested</label>
                             <input type="number" class="field-input" data-field="amountRequested"
-                                value={formData.amountRequested} disabled />
+                                value={formData.amountRequested} min="0" step="0.01" disabled />
                         </div>
                     </div>
 
@@ -827,7 +707,7 @@
                         <div class="field-group">
                             <label class="field-label">* Electronic Signature</label>
                             <input type="text" class="field-input" data-field="electronicSignature"
-                                value={formData.electronicSignature} onchange={handleInputChange} />
+                                value={formData.electronicSignature} onchange={handleInputChange} data-required/>
                         </div>
                         <div class="field-group">
                             <label class="field-label">* Date</label>
@@ -852,8 +732,12 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
+
+                <c-gps-form-modal if:true={showModal} 
+                                form-data={formData}
+                                onclose={handleModalClose}>
+                </c-gps-form-modal>
 
             </div>
         </div>

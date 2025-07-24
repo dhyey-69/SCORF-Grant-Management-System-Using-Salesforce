@@ -1,0 +1,177 @@
+<template>
+    <section role="dialog" class="slds-modal slds-fade-in-open">
+        <div class="custom-modal slds-modal__container">
+            <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={handleClose}>
+                <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+            </button>
+
+            <div class="slds-modal__content slds-p-around_medium">
+                <div class="preview-modal-content">
+
+                    <!-- Political Subdivision Info -->
+                    <div class="section-header">
+                        <div class="section-title">
+                            <lightning-icon icon-name="utility:company" size="small" class="section-icon"></lightning-icon>
+                            <h2>Political Subdivision Information</h2>
+                        </div>
+                    </div>
+                    <div class="preview-grid">
+                        <p><label>Fund Type:</label> {formData.fundType}</p>
+                        <p><label>Servability Approval:</label> {formData.servabilityApproval}</p>
+                        <p><label>Name of Individual Completing the Application:</label> {formData.nameOfPersonCompletingForm}</p>
+                        <p><label>Title of Individual Completing the Application:</label> {formData.titleOfPersonCompletingForm}</p>
+                        <p><label>Political Subdivision Name:</label> {formData.politicalSubdivisionName}</p>
+                        <p><label>Political Subdivision Contact Number:</label> {formData.politicalSubdivisionContact}</p>
+                        <p><label>Political Subdivision Email:</label> {formData.politicalSubdivisionEmail}</p>
+                        <p><label>SCEIS Vendor Number:</label> {formData.sceisVendorNumber}</p>
+                        <p><label>Entity Type:</label> {formData.entityType}</p>
+                        <p><label>Other Entity Type Name:</label> {formData.otherEntityType}</p>
+                        <p><label>Collaborating with Other GPS?:</label> {formData.collaboratingWithOtherGPS}</p>
+                        <p><label>Collaborating Counties:</label> {formData.collaboratingCounties}</p>
+                        <p><label>Is Bellwether Plaintiff?:</label> {formData.isBellwetherPlaintiff}</p>
+                        <p><label>Is Litigating Subdivision?:</label> {formData.isLitigatingSubdivision}</p>
+                        <p><label>Conflict of Interest?:</label> {formData.conflictOfInterest}</p>
+                        <p><label>Conflict Explanation:</label> {formData.conflictExplanation}</p>
+                    </div>
+
+                    <!-- Payment Remit -->
+                    <div class="section-header">
+                        <div class="section-title">
+                            <lightning-icon icon-name="utility:expense" size="small" class="section-icon"></lightning-icon>
+                            <h2>Payment Remit To (As per SCEIS)</h2>
+                        </div>
+                    </div>
+                    <div class="preview-grid">
+                        <p><label>Address Line 1:</label> {formData.paymentAddress1}</p>
+                        <p><label>Address Line 2:</label> {formData.paymentAddress2}</p>
+                        <p><label>City:</label> {formData.paymentCity}</p>
+                        <p><label>State:</label> {formData.paymentState}</p>
+                        <p><label>Zip:</label> {formData.paymentZip}</p>
+                    </div>
+
+                    <!-- Political Subdivision Address -->
+                    <div class="section-header">
+                        <div class="section-title">
+                            <lightning-icon icon-name="utility:location" size="small" class="section-icon"></lightning-icon>
+                            <h2>Political Subdivision Address</h2>
+                        </div>
+                    </div>
+                    <div class="preview-grid">
+                        <p><label>Address Line 1:</label> {formData.subdivisionAddress1}</p>
+                        <p><label>Address Line 2:</label> {formData.subdivisionAddress2}</p>
+                        <p><label>City:</label> {formData.subdivisionCity}</p>
+                        <p><label>State:</label> {formData.subdivisionState}</p>
+                        <p><label>Zip:</label> {formData.subdivisionZip}</p>
+                    </div>
+
+                    <!-- Application Contact -->
+                    <div class="section-header">
+                        <div class="section-title">
+                            <lightning-icon icon-name="utility:user" size="small" class="section-icon"></lightning-icon>
+                            <h2>Application Point of Contact</h2>
+                        </div>
+                    </div>
+                    <div class="preview-grid">
+                        <p><label>Program Manager Name:</label> {formData.programManagerName}</p>
+                        <p><label>Fiscal Manager Name:</label> {formData.fiscalManagerName}</p>
+                        <p><label>Program Manager Email:</label> {formData.programManagerEmail}</p>
+                        <p><label>Fiscal Manager Email:</label> {formData.fiscalManagerEmail}</p>
+                        <p><label>Program Manager Phone:</label> {formData.programManagerPhone}</p>
+                        <p><label>Fiscal Manager Phone:</label> {formData.fiscalManagerPhone}</p>
+                    </div>
+
+                    <!-- Partner Table -->
+                    <div class="section-header">
+                        <div class="section-title">
+                            <lightning-icon icon-name="utility:groups" size="small" class="section-icon"></lightning-icon>
+                            <h2>Partner Table</h2>
+                        </div>
+                    </div>
+                    <div class="partner-table-container">
+                        <template if:true={formData.partners}>
+                            <table class="partner-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Partner Name</th>
+                                        <th>Actions</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={formData.partners} for:item="partner" for:index="index">
+                                        <tr key={partner.id}>
+                                            <td>{partner.index}</td>
+                                            <td>{partner.name}</td>
+                                            <td>
+                                                <button class="action-btn view-btn" data-id={partner.id} onclick={handleViewPartner}>
+                                                    <lightning-icon icon-name="utility:preview" size="x-small"></lightning-icon>
+                                                    View
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="action-btn edit-btn" data-id={partner.id} onclick={handleEditPartner}>
+                                                    <lightning-icon icon-name="utility:edit" size="x-small"></lightning-icon>
+                                                    Edit
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="action-btn delete-btn" data-id={partner.id} onclick={handleDeletePartner}>
+                                                    <lightning-icon icon-name="utility:delete" size="x-small"></lightning-icon>
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </template>
+                        <template if:false={formData.partners}>
+                            <p class="no-partners">No partners added yet.</p>
+                        </template>
+                    </div>
+
+                    <!-- Budget Information -->
+                    <div class="section-header">
+                        <div class="section-title">
+                            <lightning-icon icon-name="utility:currency" size="small" class="section-icon"></lightning-icon>
+                            <h2>Budget Information</h2>
+                        </div>
+                    </div>
+                    <div class="preview-grid">
+                        <p><label>Geographic Impact:</label> {formData.geographicImpact}</p>
+                        <p><label>Existing Efforts:</label> {formData.existingEfforts}</p>
+                        <p><label>Existing Budget:</label> {formData.existingBudget}</p>
+                        <p><label>Total Budget:</label> {formData.totalBudget}</p>
+                        <p><label>Amount Requested:</label> {formData.amountRequested}</p>
+                        <p><label>Authorization Letter:</label> {formData.authorizationLetter}</p>
+                        <p><label>Signature Date:</label> {formData.signatureDate}</p>
+                    </div>
+
+                    <!-- Consent Section -->
+                    <div class="consent-section">
+                        <div class="consent-checkbox">
+                            <lightning-input 
+                                type="checkbox" 
+                                checked={formData.consentGiven}
+                                disabled
+                                label="By submitting this form, I confirm that I have read and understood the provided information, and I consent to the processing of my data in accordance with the stated terms.">
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="button-grid">
+                        <button onclick={handleEdit} class="footer-btn">
+                            <lightning-icon icon-name="utility:edit" size="x-small" class="icon-left"></lightning-icon>Edit
+                        </button>
+                        <button onclick={handleSubmit} class="footer-btn">
+                            <lightning-icon icon-name="utility:save" size="x-small" class="icon-left"></lightning-icon>Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

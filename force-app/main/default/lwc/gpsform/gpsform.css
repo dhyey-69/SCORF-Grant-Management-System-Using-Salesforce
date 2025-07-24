@@ -893,3 +893,8 @@
     padding: 0.4rem;
     box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
 }
+.error-text {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
