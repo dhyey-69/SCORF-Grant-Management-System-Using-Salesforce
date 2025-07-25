@@ -67,7 +67,8 @@ public with sharing class GpsformController {
             'Request_Type__c', 
             'Entity_Type__c',
             'Please_select_the_appropriate_county__c',
-            'State__c' 
+            'State_PSA__c' ,
+            'State_SCEIS__c'
         }) {
             if (fieldsMap.containsKey(fieldName)) {
                 List<PicklistOption> options = new List<PicklistOption>();

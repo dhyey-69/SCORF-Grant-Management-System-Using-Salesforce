@@ -52,10 +52,10 @@
                                 * Indicate whether this request is for funds from the Guaranteed Political Subdivision Fund or Discretionary Subfund
                             </label>
                             <lightning-combobox
-                                name="fundType"
+                                name="Request_Type__c"
                                 class="custom-combobox"
-                                data-field="fundType"
-                                value={formData.fundType}
+                                data-field="Request_Type__c"
+                                value={formData.Request_Type__c}
                                 options={fundTypeOptions}
                                 onchange={handleInputChange}
                                 data-required
@@ -69,11 +69,11 @@
                                 * Does the requesting Entity approve line-item servability throughout the technical approval?
                             </label>
                             <lightning-combobox
-                                name="servabilityApproval"
+                                name="Does_Entity_Approve_Line_Items__c"
                                 data-required
                                 class="custom-combobox"
-                                data-field="servabilityApproval"
-                                value={formData.servabilityApproval}
+                                data-field="Does_Entity_Approve_Line_Items__c"
+                                value={formData.Does_Entity_Approve_Line_Items__c}
                                 options={yesNoOptions}
                                 onchange={handleInputChange}
                                 placeholder="-- Select --">
@@ -83,25 +83,25 @@
                         <!-- Name of Person Completing Form -->
                         <div class="field-group">
                             <label class="field-label">* Name of Person Completing Form</label>
-                            <input type="text" class="field-input" value={formData.nameOfPersonCompletingForm}
-                                data-field="nameOfPersonCompletingForm" oninput={handleInputChange} data-pattern="^[A-Za-z\s]+$" data-required/>
+                            <input type="text" class="field-input" value={formData.Name_of_Person_Completing_Form__c}
+                                data-field="Name_of_Person_Completing_Form__c" oninput={handleInputChange} data-pattern="^[A-Za-z\s]+$" data-required/>
                         </div>
 
                         <!-- SCEIS Vendor Number -->
                         <div class="field-group">
                             <label class="field-label">SCEIS Vendor Number</label>
-                            <input type="text" class="field-input" value={formData.sceisVendorNumber}
-                                data-field="sceisVendorNumber" oninput={handleInputChange} data-pattern="^\d+$"/>
+                            <input type="text" class="field-input" value={formData.SCEIS_Vendor_Number__c}
+                                data-field="SCEIS_Vendor_Number__c" oninput={handleInputChange} data-pattern="^\d+$"/>
                         </div>
 
                         <!-- Entity Type -->
                         <div class="field-group">
                             <label class="field-label">* Entity Type</label>
                             <lightning-combobox
-                                name="entityType"
+                                name="Entity_Type__c"
                                 class="custom-combobox"
-                                data-field="entityType"
-                                value={formData.entityType}
+                                data-field="Entity_Type__c"
+                                value={formData.Entity_Type__c}
                                 options={entityTypeOptions}
                                 onchange={handleInputChange}
                                 data-required
@@ -114,9 +114,9 @@
                                 <label class="field-label">* If you selected "Other" above, please specify entity type</label>
                                 <lightning-input
                                     type="text"
-                                    name="otherEntityType"
-                                    data-field="otherEntityType"
-                                    value={formData.otherEntityType}
+                                    name="Please_Specify_Other_Entity_Type__c"
+                                    data-field="Please_Specify_Other_Entity_Type__c"
+                                    value={formData.Please_Specify_Other_Entity_Type__c}
                                     onchange={handleInputChange}
                                     data-required-if="entityType=Other"
                                     data-pattern="^[A-Za-z\s]+$"
@@ -129,11 +129,11 @@
                         <div class="field-group">
                             <label class="field-label">* Are you collaborating with any other GPS?</label>
                             <lightning-combobox
-                                name="collaboratingWithOtherGPS"
+                                name="Collaborating_with_Other_GPS_Entity__c"
                                 class="custom-combobox"
-                                data-field="collaboratingWithOtherGPS"
+                                data-field="Collaborating_with_Other_GPS_Entity__c"
                                 data-required
-                                value={formData.collaboratingWithOtherGPS}
+                                value={formData.Collaborating_with_Other_GPS_Entity__c}
                                 options={yesNoOptions}
                                 onchange={handleInputChange}
                                 placeholder="-- Select --">
@@ -144,15 +144,15 @@
                             <div class="field-group">
                                 <label class="field-label">* If so, please select the county from the list?</label>
                                 <lightning-dual-listbox
-                                    name="collaboratingCounties"
+                                    name="Please_select_the_appropriate_county__c"
                                     label="Select Counties"
                                     source-label="Available Counties"
                                     selected-label="Selected Counties"
                                     options={countyOptions}
-                                    value={formData.collaboratingCounties}
+                                    value={formData.Please_select_the_appropriate_county__c}
                                     onchange={handleInputChange}
                                     data-required-if="collaboratingWithOtherGPS=Yes"
-                                    data-field="collaboratingCounties"
+                                    data-field="Please_select_the_appropriate_county__c"
                                     required>
                                 </lightning-dual-listbox>
                             </div>
@@ -165,10 +165,10 @@
                                 * Is the requesting Entity a South Carolina Bellwether Plaintiff?
                             </label>
                             <lightning-combobox
-                                name="isBellwetherPlaintiff"
+                                name="Is_Entity_an_SC_Bellwether_Plaintiff__c"
                                 class="custom-combobox"
-                                data-field="isBellwetherPlaintiff"
-                                value={formData.isBellwetherPlaintiff}
+                                data-field="Is_Entity_an_SC_Bellwether_Plaintiff__c"
+                                value={formData.Is_Entity_an_SC_Bellwether_Plaintiff__c}
                                 data-required
                                 options={yesNoOptions}
                                 onchange={handleInputChange}
@@ -180,10 +180,10 @@
                         <div class="field-group">
                             <label class="field-label">* Was the requesting Entity a litigating subdivision?</label>
                             <lightning-combobox
-                                name="isLitigatingSubdivision"
+                                name="Was_Entity_a_Litigating_Subdivision__c"
                                 class="custom-combobox"
-                                data-field="isLitigatingSubdivision"
-                                value={formData.isLitigatingSubdivision}
+                                data-field="Was_Entity_a_Litigating_Subdivision__c"
+                                value={formData.Was_Entity_a_Litigating_Subdivision__c}
                                 data-required
                                 options={yesNoOptions}
                                 onchange={handleInputChange}
@@ -197,11 +197,11 @@
                                 * Does the requesting Entity, or any board member or employee, have any potential conflict of interest?
                             </label>
                             <lightning-combobox
-                                name="conflictOfInterest"
+                                name="Any_Potential_Conflict_with_SC_Recovery__c"
                                 class="custom-combobox"
                                 data-required
-                                data-field="conflictOfInterest"
-                                value={formData.conflictOfInterest}
+                                data-field="Any_Potential_Conflict_with_SC_Recovery__c"
+                                value={formData.Any_Potential_Conflict_with_SC_Recovery__c}
                                 options={yesNoOptions}
                                 onchange={handleInputChange}
                                 placeholder="-- Select --">
@@ -212,12 +212,12 @@
                             <div class="field-group">
                                 <label class="field-label">* If yes, please identify the SCORF Board member and the relationship.</label>
                                 <lightning-textarea
-                                    name="conflictExplanation"
-                                    data-field="conflictExplanation"
+                                    name="Identify_the_Board_member_and_Relation__c"
+                                    data-field="Identify_the_Board_member_and_Relation__c"
                                     data-pattern="^[A-Za-z\s]+$"
-                                    value={formData.conflictExplanation}
+                                    value={formData.Identify_the_Board_member_and_Relation__c}
                                     onchange={handleInputChange}
-                                    data-required-if="conflictOfInterest=Yes"
+                                    data-required-if="Any_Potential_Conflict_with_SC_Recovery__c=Yes"
                                     placeholder="Provide details of the conflict">
                                 </lightning-textarea>
                             </div>
@@ -255,19 +255,19 @@
                     <div class="form-fields">
                         <div class="field-group">
                             <label class="field-label">* Address Line 1</label>
-                            <input type="text" class="field-input" value={formData.paymentAddress1}
-                                data-field="paymentAddress1" oninput={handleInputChange} data-pattern="^[A-Za-z0-9\s.,#-]+$" data-required />
+                            <input type="text" class="field-input" value={formData.Address_Line_1_SCEIS__c}
+                                data-field="Address_Line_1_SCEIS__c" oninput={handleInputChange} data-pattern="^[A-Za-z0-9\s.,#-]+$" data-required />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">Address Line 2</label>
-                            <input type="text" class="field-input" value={formData.paymentAddress2}
-                                data-field="paymentAddress2" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} />
+                            <input type="text" class="field-input" value={formData.Address_Line_2_SCEIS__c}
+                                data-field="Address_Line_2_SCEIS__c" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* City</label>
-                            <input type="text" class="field-input" value={formData.paymentCity} data-field="paymentCity"
+                            <input type="text" class="field-input" value={formData.City_SCEIS__c} data-field="City_SCEIS__c"
                                 oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
                         </div>
 
@@ -275,10 +275,10 @@
                             <label class="field-label">* State</label>
                             <lightning-combobox
                                 class="custom-combobox fix-slds-input-faux"
-                                data-field="paymentState"
-                                name="paymentState"
-                                value={formData.paymentState}
-                                options={stateOptions}
+                                data-field="State_SCEIS__c"
+                                name="State_SCEIS__c"
+                                value={formData.State_SCEIS__c}
+                                options={stateSCEISOptions}
                                 onchange={handleInputChange}
                                 data-required
                                 placeholder="-- Select --">
@@ -287,7 +287,7 @@
 
                         <div class="field-group">
                             <label class="field-label">* Zip</label>
-                            <input type="text" class="field-input" value={formData.paymentZip} data-field="paymentZip"
+                            <input type="text" class="field-input" value={formData.Zip_SCEIS__c} data-field="Zip_SCEIS__c"
                                 oninput={handleInputChange} data-required data-pattern="^\d{5}$"/>
                         </div>
                     </div>
@@ -299,31 +299,31 @@
                     <div class="form-fields">
                         <div class="field-group">
                             <label class="field-label">* Address Line 1</label>
-                            <input type="text" class="field-input" value={formData.subdivisionAddress1}
-                                data-field="subdivisionAddress1" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} data-required/>
+                            <input type="text" class="field-input" value={formData.Address_Line_1_PSA__c}
+                                data-field="Address_Line_1_PSA__c" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">Address Line 2</label>
-                            <input type="text" class="field-input" value={formData.subdivisionAddress2}
-                                data-field="subdivisionAddress2" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} />
+                            <input type="text" class="field-input" value={formData.Address_Line_2_PSA__c}
+                                data-field="Address_Line_2_PSA__c" data-pattern="^[A-Za-z0-9\s.,#-]+$" oninput={handleInputChange} />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* City</label>
-                            <input type="text" class="field-input" value={formData.subdivisionCity}
-                                data-field="subdivisionCity" oninput={handleInputChange} data-pattern="^[A-Za-z\s]+$" data-required/>
+                            <input type="text" class="field-input" value={formData.City_PSA__c}
+                                data-field="City_PSA__c" oninput={handleInputChange} data-pattern="^[A-Za-z\s]+$" data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* State</label>
                             <lightning-combobox
                                 class="custom-combobox fix-slds-input-faux"
-                                data-field="subdivisionState"
-                                name="subdivisionState"
-                                value={formData.subdivisionState}
+                                data-field="State_PSA__c"
+                                name="State_PSA__c"
+                                value={formData.State_PSA__c}
                                 data-required
-                                options={stateOptions}
+                                options={statePSAOptions}
                                 onchange={handleInputChange}
                                 placeholder="-- Select --">
                             </lightning-combobox>
@@ -332,8 +332,8 @@
 
                         <div class="field-group">
                             <label class="field-label">* Zip</label>
-                            <input type="text" class="field-input" value={formData.subdivisionZip}
-                                data-field="subdivisionZip" oninput={handleInputChange} data-required data-pattern="^\d{5}$"/>
+                            <input type="text" class="field-input" value={formData.Zip_PSA__c}
+                                data-field="Zip_PSA__c" oninput={handleInputChange} data-required data-pattern="^\d{5}$"/>
                         </div>
                     </div>
 
@@ -344,38 +344,38 @@
                     <div class="form-fields">
                         <div class="field-group">
                             <label class="field-label">* Program Manager Name</label>
-                            <input type="text" class="field-input" value={formData.programManagerName}
-                                data-field="programManagerName" oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
+                            <input type="text" class="field-input" value={formData.Program_Manager_Name__c}
+                                data-field="Program_Manager_Name__c" oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Fiscal Manager Name</label>
-                            <input type="text" class="field-input" value={formData.fiscalManagerName}
-                                data-field="fiscalManagerName" oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
+                            <input type="text" class="field-input" value={formData.Fiscal_Manager_Title__c}
+                                data-field="Fiscal_Manager_Title__c" oninput={handleInputChange} data-required data-pattern="^[A-Za-z\s]+$"/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Program Manager Email</label>
-                            <input type="email" class="field-input" value={formData.programManagerEmail}
-                                data-field="programManagerEmail" oninput={handleInputChange} data-required/>
+                            <input type="email" class="field-input" value={formData.Program_Manager_Email__c}
+                                data-field="Program_Manager_Email__c" oninput={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Fiscal Manager Email</label>
-                            <input type="email" class="field-input" value={formData.fiscalManagerEmail}
-                                data-field="fiscalManagerEmail" oninput={handleInputChange} data-required />
+                            <input type="email" class="field-input" value={formData.Fiscal_Manager_Email__c}
+                                data-field="Fiscal_Manager_Email__c" oninput={handleInputChange} data-required />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Program Manager Phone Number</label>
-                            <input type="tel" class="field-input" value={formData.programManagerPhone}
-                                data-field="programManagerPhone" oninput={handleInputChange} data-required data-pattern="^\d{10}$"/>
+                            <input type="tel" class="field-input" value={formData.Program_Manager_Phone_Number__c}
+                                data-field="Program_Manager_Phone_Number__c" oninput={handleInputChange} data-required data-pattern="^\d{10}$"/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Fiscal Manager Phone Number</label>
-                            <input type="tel" class="field-input" value={formData.fiscalManagerPhone}
-                                data-field="fiscalManagerPhone" oninput={handleInputChange} data-required data-pattern="^\d{10}$"/>
+                            <input type="tel" class="field-input" value={formData.Fiscal_Manager_Phone_Number__c}
+                                data-field="Fiscal_Manager_Phone_Number__c" oninput={handleInputChange} data-required data-pattern="^\d{10}$"/>
                         </div>
                     </div>
 
@@ -676,13 +676,13 @@
                         <div class="field-group">
                             <label class="field-label">* Minus Estimated Carry Forward Amount</label>
                             <input type="number" class="field-input" data-field="carryForward"
-                                value={formData.carryForward} min="0" step="0.01" data-pattern="^\d+$" onchange={handleInputChange} data-required/>
+                                value={formData.carryForward} min="0" step="0.01" data-pattern="^\d+(\.\d{1,2})?$" onchange={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Minus Estimated Interest Earned</label>
                             <input type="number" class="field-input" data-field="interestEarned"
-                                value={formData.interestEarned} min="0" step="0.01" data-pattern="^\d+$" onchange={handleInputChange} data-required/>
+                                value={formData.interestEarned} min="0" step="0.01" data-pattern="^\d+(\.\d{1,2})?$" onchange={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">

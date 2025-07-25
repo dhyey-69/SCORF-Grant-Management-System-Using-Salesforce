@@ -3,8 +3,11 @@ import MyImage from '@salesforce/resourceUrl/scorf';
 import getAbatementStrategyPicklists from '@salesforce/apex/GpsformController.getAbatementStrategyPicklists';
 import getFundingAppPicklists from '@salesforce/apex/GpsformController.getFundingAppPicklists';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { NavigationMixin } from 'lightning/navigation';
+import saveStep1 from '@salesforce/apex/FundingApplicationService.saveStep1';
+// import saveFormData from '@salesforce/apex/GpsformController.saveFormData';
 
-export default class Gpsform extends LightningElement {
+export default class Gpsform extends NavigationMixin(LightningElement) {
     @track currentStep = 1;
     imageUrl = MyImage;
     fileInput;
@@ -19,6 +22,7 @@ export default class Gpsform extends LightningElement {
     @track entityTypeOptions = [];
     @track countyOptions = [];
     stateOptions = [];
+    filePayload = null;
     @track showModal = false; 
 
     formDataTarget = {};
@@ -42,7 +46,8 @@ export default class Gpsform extends LightningElement {
             this.fundTypeOptions = data.Request_Type__c || [];
             this.entityTypeOptions = data.Entity_Type__c || [];
             this.countyOptions = data.Please_select_the_appropriate_county__c || [];
-            this.stateOptions = data.State__c || []; // 🔥 You got State now!
+            this.statePSAOptions = data.State_PSA__c || [];
+            this.stateSCEISOptions = data.State_SCEIS__c || [];
         } else if (error) {
             console.error('Error loading Funding picklists:', error);
         }
@@ -251,7 +256,7 @@ export default class Gpsform extends LightningElement {
 
         this.formData[field] = value;
 
-        if (field === 'entityType' && value !== 'Other') this.formData.otherEntityType = '';
+        if (field === 'Entity_Type__c' && value !== 'Other') this.formData.Please_Specify_Other_Entity_Type__c = '';
         if (field === 'conflictOfInterest' && value !== 'Yes') this.formData.conflictExplanation = '';
         if (field === 'collaboratingWithOtherGPS' && value !== 'Yes') this.formData.collaboratingCounties = '';
         if (['carryForward', 'interestEarned'].includes(field)) this.updateCalculatedFields();
@@ -263,11 +268,23 @@ export default class Gpsform extends LightningElement {
 
     handleFileChange(e) {
         const file = e.target.files[0];
-        if (file) {
-            this.fileName = file.name;
-            this.formData.authorizationLetter = file.name;
-            this.isFileUploaded = true;
-        }
+        if (!file) return;
+
+        this.fileName = file.name;
+        this.formData.authorizationLetter = file.name;
+        this.isFileUploaded = true;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            // reader.result => "data:application/pdf;base64,JVBERi0xLjcK..."
+            const base64 = reader.result.split(',')[1];
+            this.filePayload = {
+                name: file.name,
+                contentType: file.type || 'application/pdf',
+                base64
+            };
+        };
+        reader.readAsDataURL(file);
     }
 
     handleDeleteFile() {
@@ -334,18 +351,122 @@ export default class Gpsform extends LightningElement {
     }
 
     handleSubmit() { 
+        const stepSelector = `.step-form-${this.currentStep}`;
+        if (!this.validateCurrentStep(stepSelector)) return;
+
         console.log('Form submitted:', JSON.stringify(this.formData, null, 2)); 
         this.showModal = true; 
         console.log('Save & Preview is Clicked');
-        const stepSelector = `.step-form-${this.currentStep}`;
-        
-        if (!this.validateCurrentStep(stepSelector)) return;
     }
+
+
     handleSaveExit() {
-        console.log('Save & Exit clicked:');
-        console.log('Form Data:', JSON.stringify(this.formData, null, 2));
-        console.log('Core Strategies:', JSON.stringify(this.coreStrategies, null, 2));
+        // Step validation
+        const stepSelector = `.step-form-1`;
+        if (!this.validateCurrentStep(stepSelector)) {
+            console.warn('Validation failed for Step 1');
+            return;
+        }
+
+        try {
+            this.isLoading = true;
+
+            // Build the DTO
+            // const dto = JSON.parse(JSON.stringify(this.buildStep1Payload()));
+            // console.log('DTO built from formData (clean):', JSON.stringify(dto, null, 2));
+
+            // Call Apex
+            const recordId = saveStep1({ formData: this.formData });
+
+            // Show success
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: `Funding Application saved. Id: ${recordId}`,
+                    variant: 'success'
+                })
+            );
+
+            // Reset and navigate
+            this.resetForm();
+            this.navigateToHome();
+
+        } catch (e) {
+
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error saving record',
+                    message: this.reduceErrors(e).join(', '),
+                    variant: 'error'
+                })
+            );
+        } finally {
+            this.isLoading = false;
+        }
     }
+
+
+    resetForm() {
+        // Nuke formData
+        this.formDataTarget = {};
+        this.formData = new Proxy(this.formDataTarget, {
+            get: (target, prop) => (prop in target ? target[prop] : ''),
+            set: (target, prop, value) => ((target[prop] = value), true)
+        });
+
+        // Clean file state
+        this.filePayload = null;
+        this.fileName = '';
+        this.isFileUploaded = false;
+        if (this.fileInput) this.fileInput.value = null;
+
+        // Reset UI state
+        this.currentStep = 1;
+    }
+
+    navigateToHome() {
+        // Experience Cloud named page (assuming "Home")
+        try {
+            this[NavigationMixin.Navigate]({
+                type: 'comm__namedPage',
+                attributes: {
+                    name: 'Home'
+                }
+            });
+        } catch (e) {
+            // fallback to root url in case it's not a community
+            this[NavigationMixin.Navigate]({
+                type: 'standard__webPage',
+                attributes: {
+                    url: '/'
+                }
+            });
+        }
+    }
+
+    reduceErrors(errors) {
+        if (!Array.isArray(errors)) {
+            errors = [errors];
+        }
+        return (
+            errors
+                .filter((e) => !!e)
+                .map((e) => {
+                    if (Array.isArray(e.body)) {
+                        return e.body.map((err) => err.message);
+                    } else if (e?.body?.message) {
+                        return e.body.message;
+                    } else if (e?.message) {
+                        return e.message;
+                    }
+                    return e.statusText || 'Unknown error';
+                })
+                .reduce((prev, curr) => prev.concat(curr), [])
+                .filter((message) => !!message)
+        );
+    }
+
+
 
     handleModalClose() {
         this.showModal = false;
@@ -365,9 +486,9 @@ export default class Gpsform extends LightningElement {
     get isStep2() { return this.currentStep === 2; }
     get isStep3() { return this.currentStep === 3; }
     get isStep4() { return this.currentStep === 4; }
-    get isOtherEntityType() { return this.formData.entityType === 'Other'; }
-    get hasConflict() { return this.formData.conflictOfInterest === 'Yes'; }
-    get isCollaborating() { return this.formData.collaboratingWithOtherGPS === 'Yes'; }
+    get isOtherEntityType() { return this.formData.Entity_Type__c === 'Other'; }
+    get hasConflict() { return this.formData.Any_Potential_Conflict_with_SC_Recovery__c === 'Yes'; }
+    get isCollaborating() { return this.formData.Collaborating_with_Other_GPS_Entity__c === 'Yes'; }
 
     // Dynamic Class Helpers
     get step1CircleClass() { return `step-circle${this.currentStep >= 1 ? ' active' : ''}`; }
@@ -377,6 +498,61 @@ export default class Gpsform extends LightningElement {
     get connector1Class() { return `step-connector${this.currentStep >= 2 ? ' active' : ''}`; }
     get connector2Class() { return `step-connector${this.currentStep >= 3 ? ' active' : ''}`; }
     get connector3Class() { return `step-connector${this.currentStep >= 4 ? ' active' : ''}`; }
+
+    // buildStep1Payload() {
+    //     // Log the raw formData to verify its content
+    //     console.log('DEBUG - buildStep1Payload - Raw formData:', JSON.stringify(this.formData, null, 2));
+
+    //     const dto = {
+    //         // direct mappings
+    //         Request_Type: this.formData.Request_Type__c,
+    //         servabilityApproval: this.formData.servabilityApproval,
+    //         nameOfPersonCompletingForm: this.formData.nameOfPersonCompletingForm,
+    //         sceisVendorNumber: this.formData.sceisVendorNumber,
+    //         entityType: this.formData.entityType,
+    //         otherEntityType: this.formData.otherEntityType,
+    //         collaboratingWithOtherGPS: this.formData.collaboratingWithOtherGPS,
+    //         collaboratingCounties: Array.isArray(this.formData.collaboratingCounties)
+    //             ? this.formData.collaboratingCounties
+    //             : (this.formData.collaboratingCounties ? [this.formData.collaboratingCounties] : []),
+    //         isBellwetherPlaintiff: this.formData.isBellwetherPlaintiff,
+    //         isLitigatingSubdivision: this.formData.isLitigatingSubdivision,
+    //         conflictOfInterest: this.formData.conflictOfInterest,
+    //         conflictExplanation: this.formData.conflictExplanation,
+
+    //         // SCEIS
+    //         paymentAddress1: this.formData.paymentAddress1,
+    //         paymentAddress2: this.formData.paymentAddress2,
+    //         paymentCity: this.formData.paymentCity,
+    //         paymentState: this.formData.paymentState,
+    //         paymentZip: this.formData.paymentZip,
+
+    //         // PSA
+    //         subdivisionAddress1: this.formData.subdivisionAddress1,
+    //         subdivisionAddress2: this.formData.subdivisionAddress2,
+    //         subdivisionCity: this.formData.subdivisionCity,
+    //         subdivisionState: this.formData.subdivisionState,
+    //         subdivisionZip: this.formData.subdivisionZip,
+
+    //         // POCs
+    //         programManagerName: this.formData.programManagerName,
+    //         programManagerEmail: this.formData.programManagerEmail,
+    //         programManagerPhone: this.formData.programManagerPhone,
+    //         fiscalManagerEmail: this.formData.fiscalManagerEmail,
+    //         fiscalManagerPhone: this.formData.fiscalManagerPhone,
+    //         fiscalManagerTitle: this.formData.fiscalManagerTitle,
+
+    //         // File
+    //         authorizationLetterName: this.filePayload?.name,
+    //         authorizationLetterContentType: this.filePayload?.contentType,
+    //         authorizationLetterBase64: this.filePayload?.base64
+    //     };
+
+    //     // Log the final DTO
+    //     console.log('DEBUG - buildStep1Payload - Final DTO:', JSON.stringify(dto, null, 2));
+
+    //     return dto;
+    // }
 
     validateBudgetAmounts() {
         let isValid = true;
@@ -389,13 +565,11 @@ export default class Gpsform extends LightningElement {
                 subStrategies: strategy.subStrategies.map(sub => {
                     let totalCharged = 0;
 
-                    // Sum personnelList
                     sub.personnelList.forEach(p => {
                         const val = parseFloat(p.totalCharged);
                         if (!isNaN(val)) totalCharged += val;
                     });
 
-                    // Sum budgetList
                     sub.budgetList.forEach(b => {
                         const val = parseFloat(b.totalCharged);
                         if (!isNaN(val)) totalCharged += val;
@@ -426,7 +600,7 @@ export default class Gpsform extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Budget Validation Error',
-                    message: firstErrorMessage, // Show the same message as validationError
+                    message: firstErrorMessage,
                     variant: 'error'
                 })
             );
@@ -434,6 +608,5 @@ export default class Gpsform extends LightningElement {
 
         return isValid;
     }
-
 
 }

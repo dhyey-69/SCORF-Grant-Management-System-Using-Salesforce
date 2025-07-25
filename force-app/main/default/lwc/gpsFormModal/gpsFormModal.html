@@ -20,9 +20,9 @@
                         <p><label>Servability Approval:</label> {formData.servabilityApproval}</p>
                         <p><label>Name of Individual Completing the Application:</label> {formData.nameOfPersonCompletingForm}</p>
                         <p><label>Title of Individual Completing the Application:</label> {formData.titleOfPersonCompletingForm}</p>
-                        <p><label>Political Subdivision Name:</label> {formData.politicalSubdivisionName}</p>
-                        <p><label>Political Subdivision Contact Number:</label> {formData.politicalSubdivisionContact}</p>
-                        <p><label>Political Subdivision Email:</label> {formData.politicalSubdivisionEmail}</p>
+                        <!-- <p><label>Political Subdivision Name:</label> {formData.politicalSubdivisionName}</p> -->
+                        <!-- <p><label>Political Subdivision Contact Number:</label> {formData.politicalSubdivisionContact}</p> -->
+                        <!-- <p><label>Political Subdivision Email:</label> {formData.politicalSubdivisionEmail}</p> -->
                         <p><label>SCEIS Vendor Number:</label> {formData.sceisVendorNumber}</p>
                         <p><label>Entity Type:</label> {formData.entityType}</p>
                         <p><label>Other Entity Type Name:</label> {formData.otherEntityType}</p>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="partner-table-container">
-                        <template if:true={formData.partners}>
+                        <template if:true={hasPartners}>
                             <table class="partner-table">
                                 <thead>
                                     <tr>
@@ -100,7 +100,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <template for:each={formData.partners} for:item="partner" for:index="index">
+                                    <template for:each={partnersData} for:item="partner">
                                         <tr key={partner.id}>
                                             <td>{partner.index}</td>
                                             <td>{partner.name}</td>
@@ -127,7 +127,8 @@
                                 </tbody>
                             </table>
                         </template>
-                        <template if:false={formData.partners}>
+
+                        <template if:false={hasPartners}>
                             <p class="no-partners">No partners added yet.</p>
                         </template>
                     </div>
@@ -154,8 +155,7 @@
                         <div class="consent-checkbox">
                             <lightning-input 
                                 type="checkbox" 
-                                checked={formData.consentGiven}
-                                disabled
+                                onchange={handleConsentChange}
                                 label="By submitting this form, I confirm that I have read and understood the provided information, and I consent to the processing of my data in accordance with the stated terms.">
                             </lightning-input>
                         </div>
