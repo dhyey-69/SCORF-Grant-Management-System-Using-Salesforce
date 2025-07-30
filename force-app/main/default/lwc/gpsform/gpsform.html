@@ -669,26 +669,26 @@
                     <div class="form-fields">
                         <div class="field-group">
                             <label class="field-label">* Total Project Budget</label>
-                            <input type="number" class="field-input" data-field="totalBudget"
-                                value={formData.totalBudget} min="0" step="0.01" disabled />
+                            <input type="number" class="field-input" data-field="Total_Project_Budget__c"
+                                value={formData.Total_Project_Budget__c} min="0" step="0.01" disabled />
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Minus Estimated Carry Forward Amount</label>
-                            <input type="number" class="field-input" data-field="carryForward"
-                                value={formData.carryForward} min="0" step="0.01" data-pattern="^\d+(\.\d{1,2})?$" onchange={handleInputChange} data-required/>
+                            <input type="number" class="field-input" data-field="Minus_Estimated_Carry_Forward_Amount__c"
+                                value={formData.Minus_Estimated_Carry_Forward_Amount__c} min="0" step="0.01" data-pattern="^\d+(\.\d{1,2})?$" onchange={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Minus Estimated Interest Earned</label>
-                            <input type="number" class="field-input" data-field="interestEarned"
-                                value={formData.interestEarned} min="0" step="0.01" data-pattern="^\d+(\.\d{1,2})?$" onchange={handleInputChange} data-required/>
+                            <input type="number" class="field-input" data-field="Minus_Estimated_Interest_Earned__c"
+                                value={formData.Minus_Estimated_Interest_Earned__c} min="0" step="0.01" data-pattern="^\d+(\.\d{1,2})?$" onchange={handleInputChange} data-required/>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">* Total Amount Requested</label>
-                            <input type="number" class="field-input" data-field="amountRequested"
-                                value={formData.amountRequested} min="0" step="0.01" disabled />
+                            <input type="number" class="field-input" data-field="Total_Amount_Requested__c"
+                                value={formData.Total_Amount_Requested__c} min="0" step="0.01" disabled />
                         </div>
                     </div>
 
@@ -706,13 +706,13 @@
                     <div class="form-fields">
                         <div class="field-group">
                             <label class="field-label">* Electronic Signature</label>
-                            <input type="text" class="field-input" data-field="electronicSignature"
-                                value={formData.electronicSignature} onchange={handleInputChange} data-required/>
+                            <input type="text" class="field-input" data-field="Electronic_Signature__c"
+                                value={formData.Electronic_Signature__c} onchange={handleInputChange} data-required/>
                         </div>
                         <div class="field-group">
                             <label class="field-label">* Date</label>
-                            <input type="date" class="field-input" data-field="signatureDate"
-                                value={formData.signatureDate} disabled />
+                            <input type="date" class="field-input" data-field="Date__c"
+                                value={formData.Date__c} disabled />
                         </div>
                     </div>
 

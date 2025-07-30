@@ -163,11 +163,11 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
                 if (!isNaN(val)) total += val;
             });
         });
-        this.formData.totalBudget = total;
+        this.formData.Total_Project_Budget__c = total;
 
-        const carry = parseFloat(this.formData.carryForward) || 0;
-        const interest = parseFloat(this.formData.interestEarned) || 0;
-        this.formData.amountRequested = total - carry - interest;
+        const carry = parseFloat(this.formData.Minus_Estimated_Carry_Forward_Amount__c) || 0;
+        const interest = parseFloat(this.formData.Minus_Estimated_Interest_Earned__c) || 0;
+        this.formData.Total_Amount_Requested__c = total - carry - interest;
     }
 
     toggleStrategyOrSub(type, event) {
@@ -257,9 +257,9 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
         this.formData[field] = value;
 
         if (field === 'Entity_Type__c' && value !== 'Other') this.formData.Please_Specify_Other_Entity_Type__c = '';
-        if (field === 'conflictOfInterest' && value !== 'Yes') this.formData.conflictExplanation = '';
-        if (field === 'collaboratingWithOtherGPS' && value !== 'Yes') this.formData.collaboratingCounties = '';
-        if (['carryForward', 'interestEarned'].includes(field)) this.updateCalculatedFields();
+        if (field === 'Any_Potential_Conflict_with_SC_Recovery__c' && value !== 'Yes') this.formData.conflictExplanation = '';
+        if (field === 'Collaborating_with_Other_GPS_Entity__c' && value !== 'Yes') this.formData.collaboratingCounties = '';
+        if (['Minus_Estimated_Carry_Forward_Amount__c', 'Minus_Estimated_Interest_Earned__c'].includes(field)) this.updateCalculatedFields();
     }
 
     handleCoreAbatementStrategyChange(e) {
@@ -333,8 +333,8 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
     }
 
     setTodayDateIfMissing() {
-        if (!this.formData.signatureDate) {
-            this.formData.signatureDate = new Date().toISOString().split('T')[0];
+        if (!this.formData.Date__c) {
+            this.formData.Date__c = new Date().toISOString().split('T')[0];
         }
     }
 
@@ -381,6 +381,13 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
         }
 
         console.log('🚀 Submitted formData:', JSON.stringify(this.formData, null, 2));
+
+        const multiPicklistFields = ['Please_select_the_appropriate_county__c'];
+        multiPicklistFields.forEach((field) => {
+            if (Array.isArray(this.formData[field])) {
+                this.formData[field] = this.formData[field].join(';');
+            }
+        });
 
         try {
             this.isLoading = true;
