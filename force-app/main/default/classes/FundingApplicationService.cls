@@ -15,7 +15,18 @@ public class FundingApplicationService {
         if (formData.containsKey('Entity_Type__c')) fa.Entity_Type__c = (String) formData.get('Entity_Type__c');
         if (formData.containsKey('Please_Specify_Other_Entity_Type__c')) fa.Please_Specify_Other_Entity_Type__c = (String) formData.get('Please_Specify_Other_Entity_Type__c');
         if (formData.containsKey('Collaborating_with_Other_GPS_Entity__c')) fa.Collaborating_with_Other_GPS_Entity__c = (String) formData.get('Collaborating_with_Other_GPS_Entity__c');
-        if (formData.containsKey('Please_select_the_appropriate_county__c')) fa.Please_select_the_appropriate_county__c = (String) formData.get('Please_select_the_appropriate_county__c');
+        if (formData.containsKey('Please_select_the_appropriate_county__c')) {
+            Object val = formData.get('Please_select_the_appropriate_county__c');
+            if (val instanceof List<Object>) {
+                List<String> countyList = new List<String>();
+                for (Object item : (List<Object>)val) {
+                    countyList.add((String)item);
+                }
+                fa.Please_select_the_appropriate_county__c = String.join(countyList, ';');
+            } else {
+                fa.Please_select_the_appropriate_county__c = (String) val;
+            }
+        }
         if (formData.containsKey('Is_Entity_an_SC_Bellwether_Plaintiff__c')) fa.Is_Entity_an_SC_Bellwether_Plaintiff__c = (String) formData.get('Is_Entity_an_SC_Bellwether_Plaintiff__c');
         if (formData.containsKey('Was_Entity_a_Litigating_Subdivision__c')) fa.Was_Entity_a_Litigating_Subdivision__c = (String) formData.get('Was_Entity_a_Litigating_Subdivision__c');
         if (formData.containsKey('Any_Potential_Conflict_with_SC_Recovery__c')) fa.Any_Potential_Conflict_with_SC_Recovery__c = (String) formData.get('Any_Potential_Conflict_with_SC_Recovery__c');
@@ -34,6 +45,7 @@ public class FundingApplicationService {
         if (formData.containsKey('City_PSA__c')) fa.City_PSA__c = (String) formData.get('City_PSA__c');
         if (formData.containsKey('State_PSA__c')) fa.State_PSA__c = (String) formData.get('State_PSA__c');
         if (formData.containsKey('Zip_PSA__c')) fa.Zip_PSA__c = (String) formData.get('Zip_PSA__c');
+        fa.Application_Status__c = 'Draft';
 
         // POCs
         if (formData.containsKey('Program_Manager_Name__c')) fa.Program_Manager_Name__c = (String) formData.get('Program_Manager_Name__c');
@@ -43,30 +55,50 @@ public class FundingApplicationService {
         if (formData.containsKey('Fiscal_Manager_Email__c')) fa.Fiscal_Manager_Email__c = (String) formData.get('Fiscal_Manager_Email__c');
         if (formData.containsKey('Fiscal_Manager_Phone_Number__c')) fa.Fiscal_Manager_Phone_Number__c = (String) formData.get('Fiscal_Manager_Phone_Number__c');
 
+        fa.Application_Status__c = 'Draft';
+
         insert fa;
 
-        // File Upload using ContentVersion
+        try {
         if (formData.containsKey('authorizationLetterBase64') && String.isNotBlank((String) formData.get('authorizationLetterBase64'))) {
+            System.debug('⚙️ Starting file upload process...');
+
             ContentVersion cv = new ContentVersion();
 
-            // Get and sanitize file name
             String fileName = (String) formData.get('authorizationLetterName');
             if (String.isBlank(fileName)) fileName = 'Authorization_Letter.pdf';
             String title = fileName.endsWith('.pdf') ? fileName.substring(0, fileName.length() - 4) : fileName;
 
+            System.debug('📁 File Name: ' + fileName);
+            System.debug('📌 File Title: ' + title);
+
             cv.Title = title;
             cv.PathOnClient = fileName;
             cv.VersionData = EncodingUtil.base64Decode((String) formData.get('authorizationLetterBase64'));
-            insert cv;
 
-            // Link file to Funding Application
+            insert cv;
+            System.debug('✅ ContentVersion inserted. ID: ' + cv.Id);
+
+            // Re-query for ContentDocumentId
+            cv = [SELECT Id, ContentDocumentId FROM ContentVersion WHERE Id = :cv.Id LIMIT 1];
+            System.debug('📎 Retrieved ContentDocumentId: ' + cv.ContentDocumentId);
+
+            // Link file to Funding Application record
             ContentDocumentLink cdl = new ContentDocumentLink();
-            cdl.ContentDocumentId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :cv.Id].ContentDocumentId;
             cdl.LinkedEntityId = fa.Id;
-            cdl.ShareType = 'V';  
+            cdl.ContentDocumentId = cv.ContentDocumentId;
+            cdl.ShareType = 'V';
             cdl.Visibility = 'AllUsers';
+
             insert cdl;
+            System.debug('🔗 ContentDocumentLink inserted. LinkedEntityId: ' + fa.Id);
+        } else {
+            System.debug('📭 No file upload detected in formData.');
         }
+    } catch (Exception ex) {
+        System.debug('❌ File upload failed: ' + ex.getMessage());
+        throw new AuraHandledException('File upload failed: ' + ex.getMessage());
+    }
 
         return fa.Id;
     }

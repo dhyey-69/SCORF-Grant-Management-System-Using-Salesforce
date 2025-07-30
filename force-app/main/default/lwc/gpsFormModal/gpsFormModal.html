@@ -16,22 +16,19 @@
                         </div>
                     </div>
                     <div class="preview-grid">
-                        <p><label>Fund Type:</label> {formData.fundType}</p>
-                        <p><label>Servability Approval:</label> {formData.servabilityApproval}</p>
-                        <p><label>Name of Individual Completing the Application:</label> {formData.nameOfPersonCompletingForm}</p>
-                        <p><label>Title of Individual Completing the Application:</label> {formData.titleOfPersonCompletingForm}</p>
-                        <!-- <p><label>Political Subdivision Name:</label> {formData.politicalSubdivisionName}</p> -->
-                        <!-- <p><label>Political Subdivision Contact Number:</label> {formData.politicalSubdivisionContact}</p> -->
-                        <!-- <p><label>Political Subdivision Email:</label> {formData.politicalSubdivisionEmail}</p> -->
-                        <p><label>SCEIS Vendor Number:</label> {formData.sceisVendorNumber}</p>
-                        <p><label>Entity Type:</label> {formData.entityType}</p>
-                        <p><label>Other Entity Type Name:</label> {formData.otherEntityType}</p>
-                        <p><label>Collaborating with Other GPS?:</label> {formData.collaboratingWithOtherGPS}</p>
-                        <p><label>Collaborating Counties:</label> {formData.collaboratingCounties}</p>
-                        <p><label>Is Bellwether Plaintiff?:</label> {formData.isBellwetherPlaintiff}</p>
-                        <p><label>Is Litigating Subdivision?:</label> {formData.isLitigatingSubdivision}</p>
-                        <p><label>Conflict of Interest?:</label> {formData.conflictOfInterest}</p>
-                        <p><label>Conflict Explanation:</label> {formData.conflictExplanation}</p>
+                        <p><label>Fund Type:</label> {formData.Request_Type__c}</p>
+                        <p><label>Servability Approval:</label> {formData.Does_Entity_Approve_Line_Items__c}</p>
+                        <!-- <p><label>Name of Individual Completing the Application:</label> {formData.Name_of_Person_Completing_Form__c}</p> -->
+                        <p><label>Title of Individual Completing the Application:</label> {formData.Name_of_Person_Completing_Form__c}</p>
+                        <p><label>SCEIS Vendor Number:</label> {formData.SCEIS_Vendor_Number__c}</p>
+                        <p><label>Entity Type:</label> {formData.Entity_Type__c}</p>
+                        <p><label>Other Entity Type Name:</label> {formData.Please_Specify_Other_Entity_Type__c}</p>
+                        <p><label>Collaborating with Other GPS?:</label> {formData.Collaborating_with_Other_GPS_Entity__c}</p>
+                        <p><label>Collaborating Counties:</label> {formData.Please_select_the_appropriate_county__c}</p>
+                        <p><label>Is Bellwether Plaintiff?:</label> {formData.Is_Entity_an_SC_Bellwether_Plaintiff__c}</p>
+                        <p><label>Is Litigating Subdivision?:</label> {formData.Was_Entity_a_Litigating_Subdivision__c}</p>
+                        <p><label>Conflict of Interest?:</label> {formData.Any_Potential_Conflict_with_SC_Recovery__c}</p>
+                        <p><label>Conflict Explanation:</label> {formData.Identify_the_Board_member_and_Relation__c}</p>
                     </div>
 
                     <!-- Payment Remit -->
@@ -42,11 +39,11 @@
                         </div>
                     </div>
                     <div class="preview-grid">
-                        <p><label>Address Line 1:</label> {formData.paymentAddress1}</p>
-                        <p><label>Address Line 2:</label> {formData.paymentAddress2}</p>
-                        <p><label>City:</label> {formData.paymentCity}</p>
-                        <p><label>State:</label> {formData.paymentState}</p>
-                        <p><label>Zip:</label> {formData.paymentZip}</p>
+                        <p><label>Address Line 1:</label> {formData.Address_Line_1_SCEIS__c}</p>
+                        <p><label>Address Line 2:</label> {formData.Address_Line_2_SCEIS__c}</p>
+                        <p><label>City:</label> {formData.City_SCEIS__c}</p>
+                        <p><label>State:</label> {formData.State_SCEIS__c}</p>
+                        <p><label>Zip:</label> {formData.Zip_SCEIS__c}</p>
                     </div>
 
                     <!-- Political Subdivision Address -->
@@ -57,11 +54,11 @@
                         </div>
                     </div>
                     <div class="preview-grid">
-                        <p><label>Address Line 1:</label> {formData.subdivisionAddress1}</p>
-                        <p><label>Address Line 2:</label> {formData.subdivisionAddress2}</p>
-                        <p><label>City:</label> {formData.subdivisionCity}</p>
-                        <p><label>State:</label> {formData.subdivisionState}</p>
-                        <p><label>Zip:</label> {formData.subdivisionZip}</p>
+                        <p><label>Address Line 1:</label> {formData.Address_Line_1_PSA__c}</p>
+                        <p><label>Address Line 2:</label> {formData.Address_Line_2_PSA__c}</p>
+                        <p><label>City:</label> {formData.City_PSA__c}</p>
+                        <p><label>State:</label> {formData.State_PSA__c}</p>
+                        <p><label>Zip:</label> {formData.Zip_PSA__c}</p>
                     </div>
 
                     <!-- Application Contact -->
@@ -72,12 +69,12 @@
                         </div>
                     </div>
                     <div class="preview-grid">
-                        <p><label>Program Manager Name:</label> {formData.programManagerName}</p>
-                        <p><label>Fiscal Manager Name:</label> {formData.fiscalManagerName}</p>
-                        <p><label>Program Manager Email:</label> {formData.programManagerEmail}</p>
-                        <p><label>Fiscal Manager Email:</label> {formData.fiscalManagerEmail}</p>
-                        <p><label>Program Manager Phone:</label> {formData.programManagerPhone}</p>
-                        <p><label>Fiscal Manager Phone:</label> {formData.fiscalManagerPhone}</p>
+                        <p><label>Program Manager Name:</label> {formData.Program_Manager_Name__c}</p>
+                        <p><label>Fiscal Manager Name:</label> {formData.Fiscal_Manager_Title__c}</p>
+                        <p><label>Program Manager Email:</label> {formData.Program_Manager_Email__c}</p>
+                        <p><label>Fiscal Manager Email:</label> {formData.Fiscal_Manager_Email__c}</p>
+                        <p><label>Program Manager Phone:</label> {formData.Program_Manager_Phone_Number__c}</p>
+                        <p><label>Fiscal Manager Phone:</label> {formData.Fiscal_Manager_Phone_Number__c}</p>
                     </div>
 
                     <!-- Partner Table -->

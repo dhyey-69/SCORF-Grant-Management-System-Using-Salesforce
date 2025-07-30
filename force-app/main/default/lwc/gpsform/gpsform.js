@@ -276,23 +276,34 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
 
         const reader = new FileReader();
         reader.onload = () => {
-            // reader.result => "data:application/pdf;base64,JVBERi0xLjcK..."
             const base64 = reader.result.split(',')[1];
+
             this.filePayload = {
                 name: file.name,
                 contentType: file.type || 'application/pdf',
                 base64
             };
+
+            this.formData.authorizationLetterBase64 = base64;
+            this.formData.authorizationLetterName = file.name;
+
         };
         reader.readAsDataURL(file);
     }
 
+
     handleDeleteFile() {
         this.fileName = '';
         this.formData.authorizationLetter = '';
+        this.formData.authorizationLetterBase64 = '';
+        this.formData.authorizationLetterName = '';
         this.isFileUploaded = false;
-        if (this.fileInput) this.fileInput.value = null;
+
+        if (this.fileInput) {
+            this.fileInput.value = null;
+        }
     }
+
 
     generateUniqueId() {
         return Math.random().toString(36).substring(2, 9);
@@ -362,23 +373,20 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
 
     handleSaveExit() {
         // Step validation
+        
         const stepSelector = `.step-form-1`;
         if (!this.validateCurrentStep(stepSelector)) {
             console.warn('Validation failed for Step 1');
             return;
         }
 
+        console.log('🚀 Submitted formData:', JSON.stringify(this.formData, null, 2));
+
         try {
             this.isLoading = true;
 
-            // Build the DTO
-            // const dto = JSON.parse(JSON.stringify(this.buildStep1Payload()));
-            // console.log('DTO built from formData (clean):', JSON.stringify(dto, null, 2));
-
-            // Call Apex
             const recordId = saveStep1({ formData: this.formData });
 
-            // Show success
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
@@ -387,7 +395,6 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
                 })
             );
 
-            // Reset and navigate
             this.resetForm();
             this.navigateToHome();
 
@@ -498,61 +505,6 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
     get connector1Class() { return `step-connector${this.currentStep >= 2 ? ' active' : ''}`; }
     get connector2Class() { return `step-connector${this.currentStep >= 3 ? ' active' : ''}`; }
     get connector3Class() { return `step-connector${this.currentStep >= 4 ? ' active' : ''}`; }
-
-    // buildStep1Payload() {
-    //     // Log the raw formData to verify its content
-    //     console.log('DEBUG - buildStep1Payload - Raw formData:', JSON.stringify(this.formData, null, 2));
-
-    //     const dto = {
-    //         // direct mappings
-    //         Request_Type: this.formData.Request_Type__c,
-    //         servabilityApproval: this.formData.servabilityApproval,
-    //         nameOfPersonCompletingForm: this.formData.nameOfPersonCompletingForm,
-    //         sceisVendorNumber: this.formData.sceisVendorNumber,
-    //         entityType: this.formData.entityType,
-    //         otherEntityType: this.formData.otherEntityType,
-    //         collaboratingWithOtherGPS: this.formData.collaboratingWithOtherGPS,
-    //         collaboratingCounties: Array.isArray(this.formData.collaboratingCounties)
-    //             ? this.formData.collaboratingCounties
-    //             : (this.formData.collaboratingCounties ? [this.formData.collaboratingCounties] : []),
-    //         isBellwetherPlaintiff: this.formData.isBellwetherPlaintiff,
-    //         isLitigatingSubdivision: this.formData.isLitigatingSubdivision,
-    //         conflictOfInterest: this.formData.conflictOfInterest,
-    //         conflictExplanation: this.formData.conflictExplanation,
-
-    //         // SCEIS
-    //         paymentAddress1: this.formData.paymentAddress1,
-    //         paymentAddress2: this.formData.paymentAddress2,
-    //         paymentCity: this.formData.paymentCity,
-    //         paymentState: this.formData.paymentState,
-    //         paymentZip: this.formData.paymentZip,
-
-    //         // PSA
-    //         subdivisionAddress1: this.formData.subdivisionAddress1,
-    //         subdivisionAddress2: this.formData.subdivisionAddress2,
-    //         subdivisionCity: this.formData.subdivisionCity,
-    //         subdivisionState: this.formData.subdivisionState,
-    //         subdivisionZip: this.formData.subdivisionZip,
-
-    //         // POCs
-    //         programManagerName: this.formData.programManagerName,
-    //         programManagerEmail: this.formData.programManagerEmail,
-    //         programManagerPhone: this.formData.programManagerPhone,
-    //         fiscalManagerEmail: this.formData.fiscalManagerEmail,
-    //         fiscalManagerPhone: this.formData.fiscalManagerPhone,
-    //         fiscalManagerTitle: this.formData.fiscalManagerTitle,
-
-    //         // File
-    //         authorizationLetterName: this.filePayload?.name,
-    //         authorizationLetterContentType: this.filePayload?.contentType,
-    //         authorizationLetterBase64: this.filePayload?.base64
-    //     };
-
-    //     // Log the final DTO
-    //     console.log('DEBUG - buildStep1Payload - Final DTO:', JSON.stringify(dto, null, 2));
-
-    //     return dto;
-    // }
 
     validateBudgetAmounts() {
         let isValid = true;
