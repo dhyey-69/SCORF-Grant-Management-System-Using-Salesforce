@@ -1,0 +1,116 @@
+<!-- fundingApplicationDashboard.html -->
+<template>
+    <div class="dashboard-container">
+        <!-- Dashboard Summary Cards -->
+        <div class="summary-cards">
+            <div class="card approved">
+                <div class="icon-container approved-icon">
+                    <lightning-icon icon-name="utility:check" alternative-text="Approved" size="medium"></lightning-icon>
+                </div>
+                <div class="card-content">
+                    <div class="card-label">Approved</div>
+                    <div class="card-number">{approvedCount}</div>
+                </div>
+            </div>
+            
+            <div class="card rejected">
+                <div class="icon-container rejected-icon">
+                    <lightning-icon icon-name="utility:close" alternative-text="Rejected" size="medium"></lightning-icon>
+                </div>
+                <div class="card-content">
+                    <div class="card-label">Rejected</div>
+                    <div class="card-number">{rejectedCount}</div>
+                </div>
+            </div>
+            
+            <div class="card revision">
+                <div class="icon-container revision-icon">
+                    <lightning-icon icon-name="utility:preview" alternative-text="Revision" size="medium"></lightning-icon>
+                </div>
+                <div class="card-content">
+                    <div class="card-label">Revision</div>
+                    <div class="card-number">{revisionCount}</div>
+                </div>
+            </div>
+            
+            <div class="card total">
+                <div class="icon-container total-icon">
+                    <lightning-icon icon-name="utility:table" alternative-text="Total" size="medium"></lightning-icon>
+                </div>
+                <div class="card-content">
+                    <div class="card-label">Total</div>
+                    <div class="card-number">{totalCount}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Projects Section -->
+        <div class="projects-section">
+            <div class="section-header">
+                <lightning-icon icon-name="utility:apps" alternative-text="All Projects" size="small"></lightning-icon>
+                <h2 class="section-title">All Projects</h2>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-container">
+                <table class="projects-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Application ID</th>
+                            <th>Application Status</th>
+                            <th>Submitted Date</th>
+                            <th>Request Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={displayedRecords} for:item="record" for:index="index">
+                            <tr key={record.Id} class={record.rowClass}>
+                                <td>
+                                    <div class="action-icon">
+                                        <template if:true={record.showEditIcon}>
+                                            <lightning-icon 
+                                                icon-name="utility:edit" 
+                                                alternative-text="Edit" 
+                                                size="small"
+                                                onclick={handleEdit}
+                                                data-id={record.Id}>
+                                            </lightning-icon>
+                                        </template>
+                                        <template if:false={record.showEditIcon}>
+                                            <lightning-icon 
+                                                icon-name="utility:preview" 
+                                                alternative-text="View" 
+                                                size="small"
+                                                onclick={handleView}
+                                                data-id={record.Id}>
+                                            </lightning-icon>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td>{record.Name}</td>
+                                <td>
+                                    <span class={record.statusClass}>{record.Application_Status__c}</span>
+                                </td>
+                                <td>{record.formattedDate}</td>
+                                <td>{record.Request_Type__c}</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- View More Button -->
+            <template if:true={showViewMore}>
+                <div class="view-more-container">
+                    <lightning-button 
+                        label={viewMoreLabel} 
+                        onclick={handleViewMore}
+                        variant="neutral"
+                        class="view-more-btn">
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

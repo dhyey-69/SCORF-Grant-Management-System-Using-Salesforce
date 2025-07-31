@@ -1,0 +1,252 @@
+/* fundingApplicationDashboard.css */
+.dashboard-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    min-height: 100vh;
+}
+
+/* Summary Cards Styles */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.approved-icon {
+    background-color: #d4f5d4;
+    color: #059862;
+}
+
+.rejected-icon {
+    background-color: #f4d4f4;
+    color: #8e44ad;
+}
+
+.revision-icon {
+    background-color: #d4e6f4;
+    color: #2980b9;
+}
+
+.total-icon {
+    background-color: #f4e4d4;
+    color: #e74c3c;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.card-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Projects Section */
+.projects-section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    margin-left: 8px;
+}
+
+/* Table Styles */
+.table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.projects-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.projects-table th {
+    background-color: #f8f9fa;
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    font-size: 14px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.projects-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
+}
+
+.projects-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.projects-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Action Icon */
+.action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.action-icon:hover {
+    background-color: #f0f0f0;
+}
+
+/* Status Styles */
+.status-submitted {
+    color: #666;
+    font-weight: 500;
+}
+
+.status-resubmitted {
+    color: #f39c12;
+    font-weight: 500;
+}
+
+.status-approved {
+    color: #059862;
+    font-weight: 500;
+}
+
+.status-rejected {
+    color: #e74c3c;
+    font-weight: 500;
+}
+
+.status-draft {
+    color: #95a5a6;
+    font-weight: 500;
+}
+
+.status-revisions {
+    color: #2980b9;
+    font-weight: 500;
+}
+
+.status-approve-conditions {
+    color: #f39c12;
+    font-weight: 500;
+}
+
+/* Row highlighting for editable records */
+.row-editable {
+    background-color: #fff9e6;
+}
+
+.row-editable:hover {
+    background-color: #fff3cd !important;
+}
+
+/* View More Button */
+.view-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.view-more-btn {
+    min-width: 120px;
+    border-radius: 6px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 15px;
+    }
+    
+    .summary-cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    .card-number {
+        font-size: 24px;
+    }
+    
+    .projects-section {
+        padding: 20px;
+    }
+    
+    .projects-table th,
+    .projects-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+    
+    .section-title {
+        font-size: 16px;
+    }
+}
+
+/* Additional icon styling */
+lightning-icon {
+    --sds-c-icon-color-foreground-default: currentColor;
+}

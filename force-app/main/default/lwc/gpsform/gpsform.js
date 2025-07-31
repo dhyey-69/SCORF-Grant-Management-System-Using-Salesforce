@@ -93,12 +93,12 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
             number,
             expanded: false,
             iconName: 'utility:chevrondown',
-            budgetAmount: null,
-            initialContinuation: '',
-            budgetNarrative: '',
-            implementationPlan: '',
-            outcomeMeasures: '',
-            processMeasures: '',
+            Budget_Amount_for_the_Purchase__c: null,
+            Is_your_Strategy_Initial_Continuation__c: '',
+            Budget_Narrative__c: '',
+            Implementation_plan_for_the_Strategy__c: '',
+            Provide_the_Outcome_Measures__c: '',
+            Provide_the_Process_Measures__c: '',
             personnelList: [this.createPersonnel()],
             budgetList: [this.createBudgetItem()]
         };
@@ -107,11 +107,11 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
     createPersonnel() {
         return {
             id: this.generateUniqueId(),
-            name: '',
-            position: '',
-            salary: null,
-            effort: '',
-            totalCharged: null
+            Personnel_Name__c: '',
+            Personnel_Position__c: '',
+            Personnel_Key_Staff_Annual_Salary__c: null,
+            Personnel_Level_of_Effort__c: '',
+            Personnel_Total_Charged_to_Award__c: null
         };
     }
 
@@ -119,11 +119,12 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
         return {
             id: this.generateUniqueId(),
             item: '',
-            purpose: '',
-            calculation: '',
-            totalCharged: null
+            Budget_Purpose__c: '',
+            Budget_Calculation__c: '',
+            Budget_Total_Charged_to_Award__c: null
         };
     }
+
 
     updateNestedField(type, event) {
         const { strategy, sub, recordid, field } = event.currentTarget.dataset;
@@ -157,18 +158,21 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
 
     updateCalculatedFields() {
         let total = 0;
-        this.coreStrategies.forEach(s => {
-            s.subStrategies.forEach(ss => {
-                const val = parseFloat(ss.budgetAmount);
+        this.coreStrategies.forEach(strategy => {
+            strategy.subStrategies.forEach(sub => {
+                const val = parseFloat(sub.Budget_Amount_for_the_Purchase__c);
                 if (!isNaN(val)) total += val;
             });
         });
+
         this.formData.Total_Project_Budget__c = total;
 
         const carry = parseFloat(this.formData.Minus_Estimated_Carry_Forward_Amount__c) || 0;
         const interest = parseFloat(this.formData.Minus_Estimated_Interest_Earned__c) || 0;
+
         this.formData.Total_Amount_Requested__c = total - carry - interest;
     }
+
 
     toggleStrategyOrSub(type, event) {
         const { strategy, sub } = event.currentTarget.dataset;
@@ -361,19 +365,59 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
         if (this.currentStep > 1) this.currentStep--;
     }
 
+    filterFilledStrategies(coreStrategies) {
+        return coreStrategies
+            .map(main => {
+                const filteredSubs = main.subStrategies.filter(sub => {
+                    return (
+                        sub.Budget_Amount_for_the_Purchase__c ||
+                        sub.Is_your_Strategy_Initial_Continuation__c?.trim() ||
+                        sub.Budget_Narrative__c?.trim() ||
+                        sub.Implementation_plan_for_the_Strategy__c?.trim() ||
+                        sub.Provide_the_Outcome_Measures__c?.trim() ||
+                        sub.Provide_the_Process_Measures__c?.trim() ||
+                        (sub.personnelList?.some(p =>
+                            p.Personnel_Name__c?.trim() ||
+                            p.Personnel_Position__c?.trim() ||
+                            p.Personnel_Key_Staff_Annual_Salary__c ||
+                            p.Personnel_Level_of_Effort__c?.trim() ||
+                            p.Personnel_Total_Charged_to_Award__c
+                        )) ||
+                        (sub.budgetList?.some(b =>
+                            b.item?.trim() ||
+                            b.Budget_Purpose__c?.trim() ||
+                            b.Budget_Calculation__c?.trim() ||
+                            b.Budget_Total_Charged_to_Award__c
+                        ))
+                    );
+                });
+
+                if (filteredSubs.length > 0) {
+                    return {
+                        ...main,
+                        subStrategies: filteredSubs
+                    };
+                }
+                return null;
+            })
+            .filter(Boolean); // Clean out nulls
+    }
+
+
     handleSubmit() { 
         const stepSelector = `.step-form-${this.currentStep}`;
         if (!this.validateCurrentStep(stepSelector)) return;
 
-        console.log('Form submitted:', JSON.stringify(this.formData, null, 2)); 
+        console.log('Form submitted:', JSON.stringify(this.formData, null, 2));
+        const filteredCoreStrategies = this.filterFilledStrategies(this.coreStrategies);
+        console.log('🎯 Filtered Core Strategies:', JSON.stringify(filteredCoreStrategies, null, 2));
         this.showModal = true; 
         console.log('Save & Preview is Clicked');
     }
 
 
-    handleSaveExit() {
-        // Step validation
-        
+
+    async handleSaveExit() {
         const stepSelector = `.step-form-1`;
         if (!this.validateCurrentStep(stepSelector)) {
             console.warn('Validation failed for Step 1');
@@ -382,6 +426,9 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
 
         console.log('🚀 Submitted formData:', JSON.stringify(this.formData, null, 2));
 
+        const filteredCoreStrategies = this.filterFilledStrategies(this.coreStrategies);
+        console.log('🎯 Filtered Core Strategies:', JSON.stringify(filteredCoreStrategies, null, 2));
+
         const multiPicklistFields = ['Please_select_the_appropriate_county__c'];
         multiPicklistFields.forEach((field) => {
             if (Array.isArray(this.formData[field])) {
@@ -389,10 +436,24 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
             }
         });
 
+        const coreStrategyValues = filteredCoreStrategies.map(s => s.value);
+
+        const coreAbatementValues = filteredCoreStrategies.flatMap(s =>
+            s.subStrategies.map(sub => sub.value)
+        );
+
+        this.formData.Core_Strategies__c = coreStrategyValues.join(';');
+        this.formData.Core_Abatement_Strategies__c = coreAbatementValues.join(';');
+
+        console.log('📝 Final formData for save:', JSON.stringify(this.formData, null, 2));
+
         try {
             this.isLoading = true;
 
-            const recordId = saveStep1({ formData: this.formData });
+            const recordId = await saveStep1({
+                formData: this.formData,
+                coreStrategies: filteredCoreStrategies // 🔥 Pass for Apex child inserts if needed
+            });
 
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -406,7 +467,6 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
             this.navigateToHome();
 
         } catch (e) {
-
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Error saving record',
@@ -418,6 +478,8 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
             this.isLoading = false;
         }
     }
+
+
 
 
     resetForm() {
@@ -439,24 +501,23 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
     }
 
     navigateToHome() {
-        // Experience Cloud named page (assuming "Home")
         try {
+            // Broadcast desired state to MainLayout before navigation
+            window.sessionStorage.setItem('initialNav', 'projects');
+
             this[NavigationMixin.Navigate]({
                 type: 'comm__namedPage',
-                attributes: {
-                    name: 'Home'
-                }
+                attributes: { name: 'Home' }
             });
         } catch (e) {
-            // fallback to root url in case it's not a community
             this[NavigationMixin.Navigate]({
                 type: 'standard__webPage',
-                attributes: {
-                    url: '/'
-                }
+                attributes: { url: '/' }
             });
         }
     }
+
+
 
     reduceErrors(errors) {
         if (!Array.isArray(errors)) {
@@ -525,16 +586,16 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
                     let totalCharged = 0;
 
                     sub.personnelList.forEach(p => {
-                        const val = parseFloat(p.totalCharged);
+                        const val = parseFloat(p.Personnel_Total_Charged_to_Award__c);
                         if (!isNaN(val)) totalCharged += val;
                     });
 
                     sub.budgetList.forEach(b => {
-                        const val = parseFloat(b.totalCharged);
+                        const val = parseFloat(b.Budget_Total_Charged_to_Award__c);
                         if (!isNaN(val)) totalCharged += val;
                     });
 
-                    const budgetAmount = parseFloat(sub.budgetAmount) || 0;
+                    const budgetAmount = parseFloat(sub.Budget_Amount_for_the_Purchase__c) || 0;
                     let validationError = '';
 
                     if (totalCharged !== budgetAmount) {
@@ -567,5 +628,5 @@ export default class Gpsform extends NavigationMixin(LightningElement) {
 
         return isValid;
     }
-
+    
 }

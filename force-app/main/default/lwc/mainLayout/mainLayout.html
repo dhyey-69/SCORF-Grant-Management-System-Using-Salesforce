@@ -1,0 +1,21 @@
+<template>
+    <div class="layout">
+        <div class="content-area">
+            <div if:true={isDashboard}>
+                <p>Dashboard</p>
+            </div>
+            <div if:true={isProjects}>
+                <c-project-table></c-project-table>
+            </div>
+            <div if:true={isLetter}>
+                <p>Letter of Intent</p>
+            </div>
+            <div if:true={isReports}>
+                <p>Reports</p>
+            </div>
+            <div if:true={isCloseout}>
+                <p>Close Out</p>
+            </div>
+        </div>
+    </div>
+</template>

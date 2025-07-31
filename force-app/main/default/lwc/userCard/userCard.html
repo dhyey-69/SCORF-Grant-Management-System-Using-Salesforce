@@ -13,24 +13,24 @@
         
         <div class="nav-menu">
             <ul>
-                <li class="nav-item active" onclick={handleNavClick} data-nav="dashboard">
-                    <lightning-icon icon-name="utility:home" size="x-small" alternative-text="Dashboard"></lightning-icon>
+                <li class={dashboardClass} onclick={handleNavClick} data-nav="dashboard">
+                    <lightning-icon icon-name="utility:home" size="x-small"></lightning-icon>
                     <span class="nav-label">Dashboard</span>
                 </li>
-                <li class="nav-item" onclick={handleNavClick} data-nav="projects">
-                    <lightning-icon icon-name="utility:apps" size="x-small" alternative-text="Projects"></lightning-icon>
+                <li class={projectsClass} onclick={handleNavClick} data-nav="projects">
+                    <lightning-icon icon-name="utility:apps" size="x-small"></lightning-icon>
                     <span class="nav-label">Projects</span>
                 </li>
-                <li class="nav-item" onclick={handleNavClick} data-nav="letter">
-                    <lightning-icon icon-name="utility:file" size="x-small" alternative-text="Letter of Intent"></lightning-icon>
+                <li class={letterClass} onclick={handleNavClick} data-nav="letter">
+                    <lightning-icon icon-name="utility:file" size="x-small"></lightning-icon>
                     <span class="nav-label">Letter of Intent</span>
                 </li>
-                <li class="nav-item" onclick={handleNavClick} data-nav="reports">
-                    <lightning-icon icon-name="utility:chart" size="x-small" alternative-text="Reports"></lightning-icon>
+                <li class={reportsClass} onclick={handleNavClick} data-nav="reports">
+                    <lightning-icon icon-name="utility:chart" size="x-small"></lightning-icon>
                     <span class="nav-label">Reports</span>
                 </li>
-                <li class="nav-item" onclick={handleNavClick} data-nav="closeout">
-                    <lightning-icon icon-name="utility:refresh" size="x-small" alternative-text="Close Out Package"></lightning-icon>
+                <li class={closeoutClass} onclick={handleNavClick} data-nav="closeout">
+                    <lightning-icon icon-name="utility:refresh" size="x-small"></lightning-icon>
                     <span class="nav-label">Close Out Package</span>
                 </li>
             </ul>
